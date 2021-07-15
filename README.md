@@ -6,8 +6,9 @@
 ***
 ### Quick Links
 1. [Data Cleaning/EDA Notebook](./notebooks/exploratory/cleaning_eda.ipynb)
-2. [Final Report](./notebooks/report/report.ipynb)
-3. [Presentation Slides](./reports/presentation.pdf)
+2. [Modeling Notebook](./notebooks/exploratory/modeling_eda.ipynb)
+3. [Final Report](./notebooks/report/report.ipynb)
+4. [Presentation Slides](./reports/presentation.pdf)
 ***
 ### Repository Structure
 
@@ -29,15 +30,15 @@
 ***
 ### Setup Instructions:
 
-#### Create Environment
-To setup the project environment, `cd` into the project folder and run `conda env create --file
+#### Create & Activate Environment
+`cd` into the project folder and run `conda env create --file
 online_outcomes.yml` in your terminal. Next, run `conda activate online_outcomes`.
 
-#### Download Data
-Donwload the data from this link: [Open University Learning Analytics dataset](https://analyse.kmi.open.ac.uk/open_dataset) 
+#### Download & Unzip Data
+Download the zipped data from [Open University Learning Analytics](https://analyse.kmi.open.ac.uk/open_dataset), unzip the data and place the csv files into the `raw` directory.
 
 #### Create Database
-Run the database creation notebook: [Database Creator](./data/db_creator.ipynb)
+Run the database creation notebook: [Database Creator](./data/db_creator.ipynb).
 ***
 ## Overview:
 
