@@ -1,4 +1,4 @@
-# Online Outcomes: Predicting Virtual Learning Success
+# Online Outcomes: Predicting Success in Virtual Learning
 
 ![graph0](./reports/figures/aug_neg.png)
 
@@ -27,9 +27,17 @@
 └── src
 ```
 ***
-### Setup Instructions
+### Setup Instructions:
+
+#### Create Environment
 To setup the project environment, `cd` into the project folder and run `conda env create --file
 online_outcomes.yml` in your terminal. Next, run `conda activate online_outcomes`.
+
+#### Download Data
+Donwload the data from this link: [Open University Learning Analytics dataset](https://analyse.kmi.open.ac.uk/open_dataset) 
+
+#### Create Database
+Run the database creation notebook: [Database Creator](./data/db_creator.ipynb)
 ***
 ## Overview:
 
