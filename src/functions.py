@@ -1,15 +1,17 @@
-import re
-
 from src import classes as c
 
 import pandas as pd
 import numpy as np
-
+import sqlite3
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import (f1_score, recall_score, precision_score,
                              make_scorer, plot_confusion_matrix)
 
 import matplotlib.pyplot as plt
+
+def fetch(cur, q):
+    """Returns an SQL query."""
+    return cur.execute(q).fetchall()
 
 def f_score(y_true, y_pred):
     "F1 scoring function for use in make_scorer."
