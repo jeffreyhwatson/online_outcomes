@@ -1,13 +1,48 @@
-from src import classes as c
+# importing os & sys and setting project path
+import os, sys
 
+gparent = os.path.join(os.pardir, os.pardir)
+sys.path.append(gparent)
+
+from src import classes as c
+from zipfile import ZipFile
+import sqlite3
+import glob
+import re
 import pandas as pd
 import numpy as np
-import sqlite3
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import (f1_score, recall_score, precision_score,
                              make_scorer, plot_confusion_matrix)
 
 import matplotlib.pyplot as plt
+
+def db_create(file_name, database_name):
+    zip_path = os.path.join(gparent, 'data/raw', file_name)
+    out_path  = os.path.join(gparent, 'data/raw')
+    db_path =  os.path.join(gparent, 'data/processed', database_name)
+    # opening the zip file
+    with ZipFile(zip_path, 'r') as zip:
+        # extracting files to raw
+        zip.extractall(out_path)
+
+    # creating and connecting to database
+    conn = sqlite3.connect(db_path)  
+
+    # creating paths to the files
+    path = os.path.join(gparent, 'data/raw', '*.csv')
+    ps = []
+    for name in glob.glob(path):
+        ps.append(name)
+
+    # create list of tuples with names and data frames; importing data as strings
+    dfs = [(re.split('[////./]', file_path)[8], 
+            pd.read_csv(file_path, dtype=str)) for file_path in ps]
+
+    # Adding data to the database using the tuples created above.
+    # Creating tables from the data frames, and naming the tables with the names.
+    for tup in dfs:
+        tup[1].to_sql(tup[0].upper(), conn, if_exists='append', index = False)
 
 def fetch(cur, q):
     """Returns an SQL query."""
