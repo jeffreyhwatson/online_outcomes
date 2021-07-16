@@ -1,6 +1,8 @@
 # Online Outcomes: Predicting Success in Virtual Learning
 
-![graph0](./reports/figures/aug_neg.png)
+![graph0](./reports/figures/placeholder.jpg)
+
+"Online Learning" by leanforward_photos is licensed under CC BY-SA 2.0
 
 **Author:** Jeffrey Hanif Watson
 ***
@@ -33,12 +35,6 @@
 #### Create & Activate Environment
 `cd` into the project folder and run `conda env create --file
 online_outcomes.yml` in your terminal. Next, run `conda activate online_outcomes`.
-
-#### Download & Unzip Data
-Download the zipped data from [Open University Learning Analytics](https://analyse.kmi.open.ac.uk/open_dataset), unzip the data and place the csv files into the `raw` directory.
-
-#### Create Database
-Run the database creation notebook: [Database Creator](./data/db_creator.ipynb).
 ***
 ## Overview:
 
@@ -71,6 +67,8 @@ Details of the full modeling process can be found here:
 
 ![graph8](./reports/figures/dummy.png)
 
+"Online Learning" by leanforward_photos is licensed under CC BY-SA 2.0
+
 <font size="4">Baseline Scores: F1 = 0, Recall = 0, Precision = 0</font>
 
 #### Score Interpretation
@@ -83,7 +81,7 @@ F1 is a mix of both precision and recall, so the interpretation of the results i
 
 
 
-![graph18](./reports/figures/baseline_cm.png)
+![graph18](./reports/figures/dummy.png)
 
 <font size="4">Scores on Test Data: F1 =, Recall = , Precision = </font>
 
@@ -99,12 +97,11 @@ Since F1 is a mix of both precision and recall, the interpretation of the result
 
 <font size="4">Average Scores: F1=, Recall=, Precision=</font>
 
-![graph12](./reports/figures/tuned_logreg_cm.png)
+![graph12](./reports/figures/dummy.png)
 
 <font size="4">Scores on Test Data: F1=, Recall=, Precision=</font>
 
 #### Score Interpretation
-From the confusion matrix we see that the model still has a little more trouble classifying negatives relative to positives, but the overall performance is acceptable.
 
 
 ## Alternate Final Model:  
@@ -113,21 +110,20 @@ From the confusion matrix we see that the model still has a little more trouble 
 <font size="4">Average Scores: F1=, Recall=, Precision=</font>
 
 
-![graph16](./reports/figures/tuned_rf_cm.png)
+![graph16](./reports/figures/dummy.png)
 
 <font size="4">Scores on Test Data: F1=, Recall=, Precision=</font>
 
 #### Score Interpretation
-From the confusion matrix we see that the model still has a little more trouble classifying negatives relative to positives, but the overall performance is acceptable.
+
 
 #### Notes on the Features
 
-# Conclusion
+## Conclusion & Recommendations
 
+## Next Steps
 
-# Next Steps
-
-# For More Information
+## For More Information
 
 Please review our full analysis in our [Jupyter Notebook](./notebooks/report/report.ipynb) or our [presentation](./reports/presentation.pdf).
 

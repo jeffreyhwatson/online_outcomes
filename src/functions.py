@@ -1,51 +1,55 @@
-# importing os & sys and setting project path
-import os, sys
-
-gparent = os.path.join(os.pardir, os.pardir)
-sys.path.append(gparent)
-
-from src import classes as c
+# importing 
+import os, sys, glob, re
 from zipfile import ZipFile
 import sqlite3
-import glob
-import re
 import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import (f1_score, recall_score, precision_score,
                              make_scorer, plot_confusion_matrix)
-
 import matplotlib.pyplot as plt
 
+# setting project path
+gparent = os.path.join(os.pardir, os.pardir)
+sys.path.append(gparent)
+
+# importing custom classes
+from src import classes as c
+
 def db_create(file_name, database_name):
+    """Creates and populates an sqlite database from zipped csv files."""
+    
     zip_path = os.path.join(gparent, 'data/raw', file_name)
     out_path  = os.path.join(gparent, 'data/raw')
     db_path =  os.path.join(gparent, 'data/processed', database_name)
+    
     # opening the zip file
     with ZipFile(zip_path, 'r') as zip:
-        # extracting files to raw
+        
+        # extracting files to raw directory
         zip.extractall(out_path)
-
+        
     # creating and connecting to database
     conn = sqlite3.connect(db_path)  
-
+    
     # creating paths to the files
     path = os.path.join(gparent, 'data/raw', '*.csv')
     ps = []
     for name in glob.glob(path):
         ps.append(name)
 
-    # create list of tuples with names and data frames; importing data as strings
+    # creating list of tuples with names and data frames; importing data as strings
     dfs = [(re.split('[////./]', file_path)[8], 
             pd.read_csv(file_path, dtype=str)) for file_path in ps]
 
     # Adding data to the database using the tuples created above.
-    # Creating tables from the data frames, and naming the tables with the names.
+    # Creating tables from the data frames, and naming the tables with the name strings from above.
     for tup in dfs:
         tup[1].to_sql(tup[0].upper(), conn, if_exists='append', index = False)
 
 def fetch(cur, q):
     """Returns an SQL query."""
+    
     return cur.execute(q).fetchall()
 
 def f_score(y_true, y_pred):
@@ -66,7 +70,6 @@ def recall(y_true, y_pred):
 # creating scorer object for cv
 recall = make_scorer(recall)
 
-
 def precision(y_true, y_pred):
     "Precision scoring function for use in make_scorer."
     
@@ -86,7 +89,7 @@ def splitter(X, y):
     return  X_train, X_test, y_train, y_test
 
 def confusion_report(model, X, y):
-    "Returns a confusion matrix plot."
+    "Returns a confusion matrix plot and scores."
     
     f1 = f1_score(y, model.predict(X))
     recall = recall_score(y, model.predict(X))
