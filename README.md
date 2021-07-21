@@ -43,8 +43,13 @@ online_outcomes.yml` in your terminal. Next, run `conda activate online_outcomes
  
 ***
 ## Data Understanding
-[Open University Learning Analytics dataset](https://analyse.kmi.open.ac.uk/open_dataset) 
+Citation:
+Kuzilek, J., Hlosta, M. & Zdrahal, Z. Open University Learning Analytics dataset. Sci Data 4, 170171 (2017). [Article](https://doi.org/10.1038/sdata.2017.171)
 
+Download Page:
+[Open University Learning Analytics dataset](https://analyse.kmi.open.ac.uk/open_dataset)
+
+ERD & Data Details:
 [Schema & Data Description](https://analyse.kmi.open.ac.uk/open_dataset#description)
 
 ***
