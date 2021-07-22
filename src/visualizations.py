@@ -112,6 +112,34 @@ def outcomes_reg(df):
     #             pad_inches = .25, transparent = False)
     plt.show()
 
+def outcome_cl(df): 
+    stu = df.groupby('course_load')['final_result']\
+    .value_counts(normalize=True).reset_index(name='percentage')
+    
+    fig, ax=plt.subplots(figsize=(20,8))
+    sns.barplot(x='percentage', y='final_result', hue='course_load',\
+                data=stu)
+    plt.title('Outcomes By Course Load', fontsize=25)
+    plt.xlabel('Percentage Of Outcome', fontsize=20)
+    plt.ylabel('')
+    plt.legend(title="Course Load")
+    # plt.savefig('outcomes_cl',  bbox_inches ="tight",\
+    #             pad_inches = .25, transparent = False)
+    plt.show()
+
+def outcome_clks(df):    
+    clix = df.groupby('final_result')['click_sum']\
+    .mean().reset_index(name='mean_clicks')
+    
+    fig, ax=plt.subplots(figsize=(20,8))
+    sns.barplot(x='mean_clicks', y='final_result', data=clix)
+    plt.title('Mean Clicks Per Outcome', fontsize=25)
+    plt.xlabel('Mean Number Of Clicks', fontsize=20)
+    plt.yticks(fontsize=20)
+    plt.ylabel('')
+#     plt.savefig('tuned_coeff',  bbox_inches ="tight",\
+#                 pad_inches = .25, transparent = False)    plt.show()
+
 def base_coefs(pipe):
     coefs = pipe[1].coef_.flatten()
     features = pipe[0].get_feature_names()
@@ -135,6 +163,8 @@ def base_coefs(pipe):
 #     plt.savefig('tuned_coeff',  bbox_inches ="tight",\
 #                 pad_inches = .25, transparent = False)
     plt.show()
+
+
     
 def base_neg_odds(pipe):
     coefs = pipe[1].coef_.flatten()
