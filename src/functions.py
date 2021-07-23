@@ -8,6 +8,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import (f1_score, recall_score, precision_score,
                              make_scorer, plot_confusion_matrix)
 import matplotlib.pyplot as plt
+import matplotlib.image as img
 
 # setting project path
 gparent = os.path.join(os.pardir, os.pardir)
