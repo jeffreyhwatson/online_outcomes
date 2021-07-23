@@ -13,6 +13,10 @@ import matplotlib.pyplot as plt
 gparent = os.path.join(os.pardir, os.pardir)
 sys.path.append(gparent)
 
+data_path = os.path.join(gparent,'data/processed','outcomes.db')
+conn = sqlite3.connect(data_path)  
+cur = conn.cursor()
+
 # importing custom classes
 from src import classes as c
 
@@ -89,7 +93,7 @@ def splitter(X, y):
     return  X_train, X_test, y_train, y_test
 
 def confusion_report(model, X, y):
-    "Returns a confusion matrix plot and scores."
+    """Returns a confusion matrix plot and scores."""
     
     f1 = f1_score(y, model.predict(X))
     recall = recall_score(y, model.predict(X))
@@ -109,30 +113,63 @@ def confusion_report(model, X, y):
     
     return report
 
-def df_fixes(df):
+def binarize_target(df):
+    """Binarizes target and moves column to front of data frame."""
     
-   # dropping duplicate columns
-    df = df.T.drop_duplicates().T
+    binarize = {'Pass': 1, 'Withdrawn': 0, 'Fail': 0, 'Distinction': 1}
+    df['target'] = df['final_result']
+    df['target'] = df['target'].map(binarize)
+    col_name = 'target'
+    first = df.pop(col_name)
+    df.insert(0, col_name, first)
+    return df
 
+def df_fixes(df):
+    """Performs various fixes to the dataframe."""
+    
+    # dropping duplicate columns
+    df = df.T.drop_duplicates().T
     # moving final_result to front of df
     col = 'final_result'
-    target_col = df.pop(col)
-    df.insert(0, col, target_col)
+    first_col = df.pop(col)
+    df.insert(0, col, first_col)
     df.head()
-    
     # dropping nulls
     df.dropna(inplace=True)
-
     # fixing typo
     df['imd_band'] = df['imd_band'].replace(['10-20'], '10-20%')
-    
     # renaming values
     df['disability'] = df['disability'].replace(['Y', 'N'], ['Yes', 'No'])
     df['gender'] = df['gender'].replace(['M', 'F'], ['Male', 'Female'])
-
     # converting datatypes
     conversions = ['click_sum', 'date', 'num_of_prev_attempts','studied_credits']
     df[conversions] = df[conversions].apply(pd.to_numeric)
-    
+    # adding course_load column
+    df['course_load'] = pd.qcut(df.studied_credits, q=4,\
+                                  labels=['Light', 'Medium', 'Heavy'],\
+                                  duplicates='drop')
     return df
-      
+
+def sv_si():
+    """Making new df by joining studentinfo and studentvle tables
+       and creating a click_sum column."""
+    
+    q = """
+    SELECT SV.*, 
+    SUM(SV.sum_click) AS click_sum,
+    SI.*
+    FROM 
+    STUDENTVLE as SV
+    JOIN 
+    STUDENTINFO as SI
+    ON SV.code_module = SI.code_module
+    AND SV.code_presentation = SI.code_presentation
+    AND SV.id_student = SI.id_student
+    GROUP BY 
+    SV.code_module,
+    SV.code_presentation,
+    SV.id_student;
+    """
+    df = pd.DataFrame(fetch(cur, q))
+    df.columns = [i[0] for i in cur.description]
+    return df_fixes(df) 

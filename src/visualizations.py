@@ -17,8 +17,8 @@ def outcomes_type(df):
     plt.title('Share of Outcomes by Type', fontsize=25)
     plt.ylabel('', fontsize=20)
     plt.xlabel('Percentage of Total Outcomes', fontsize=20)
-    # plt.savefig('outcomes_type',  bbox_inches ="tight",\
-    #             pad_inches = .25, transparent = False)
+#     plt.savefig('outcomes_type',  bbox_inches ="tight",\
+#                 pad_inches = .25, transparent = False)
     plt.show()
     
 def outcomes_imd(df):
@@ -47,8 +47,8 @@ def outcomes_dis(df):
     plt.ylabel(' ')
     plt.xlabel('Percentage of Outcome', fontsize=20)
     plt.legend(title='Disability', bbox_to_anchor= (1, 1))
-    # plt.savefig('outcomes_dis',  bbox_inches ="tight",\
-    #             pad_inches = .25, transparent = False)
+#     plt.savefig('outcomes_dis',  bbox_inches ="tight",\
+#                 pad_inches = .25, transparent = False)
     plt.show()
     
 
@@ -93,8 +93,8 @@ def outcomes_gen(df):
     plt.ylabel(' ')
     plt.xlabel('Percentage of Outcome', fontsize=20)
     plt.legend(title='Gender', bbox_to_anchor= (1, 1))
-    # plt.savefig('outcomes_gen',  bbox_inches ="tight",\
-    #             pad_inches = .25, transparent = False)
+#     plt.savefig('outcomes_gen',  bbox_inches ="tight",\
+#                 pad_inches = .25, transparent = False)
     plt.show()
 
 def outcomes_reg(df):
@@ -108,8 +108,8 @@ def outcomes_reg(df):
     plt.ylabel(' ')
     plt.xlabel('Percentage of Outcome', fontsize=20)
     plt.legend(title='Region', bbox_to_anchor= (1, 1))
-    # plt.savefig('outcomes_reg',  bbox_inches ="tight",\
-    #             pad_inches = .25, transparent = False)
+#     plt.savefig('outcomes_reg',  bbox_inches ="tight",\
+#                 pad_inches = .25, transparent = False)
     plt.show()
 
 def outcome_cl(df): 
@@ -123,8 +123,8 @@ def outcome_cl(df):
     plt.xlabel('Percentage Of Outcome', fontsize=20)
     plt.ylabel('')
     plt.legend(title="Course Load")
-    # plt.savefig('outcomes_cl',  bbox_inches ="tight",\
-    #             pad_inches = .25, transparent = False)
+#     plt.savefig('outcomes_cl',  bbox_inches ="tight",\
+#                 pad_inches = .25, transparent = False)
     plt.show()
 
 def outcome_clks(df):    
@@ -137,8 +137,9 @@ def outcome_clks(df):
     plt.xlabel('Mean Number Of Clicks', fontsize=20)
     plt.yticks(fontsize=20)
     plt.ylabel('')
-#     plt.savefig('tuned_coeff',  bbox_inches ="tight",\
-#                 pad_inches = .25, transparent = False)    plt.show()
+#     plt.savefig('outcome_clks',  bbox_inches ="tight",\
+#                 pad_inches = .25, transparent = False)    
+    plt.show()
 
 def base_coefs(pipe):
     coefs = pipe[1].coef_.flatten()
