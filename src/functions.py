@@ -107,5 +107,32 @@ def confusion_report(model, X, y):
 #                 pad_inches = .25, transparent = False)
     plt.show()  
     
-    return report 
+    return report
+
+def df_fixes(df):
+    
+   # dropping duplicate columns
+    df = df.T.drop_duplicates().T
+
+    # moving final_result to front of df
+    col = 'final_result'
+    target_col = df.pop(col)
+    df.insert(0, col, target_col)
+    df.head()
+    
+    # dropping nulls
+    df.dropna(inplace=True)
+
+    # fixing typo
+    df['imd_band'] = df['imd_band'].replace(['10-20'], '10-20%')
+    
+    # renaming values
+    df['disability'] = df['disability'].replace(['Y', 'N'], ['Yes', 'No'])
+    df['gender'] = df['gender'].replace(['M', 'F'], ['Male', 'Female'])
+
+    # converting datatypes
+    conversions = ['click_sum', 'date', 'num_of_prev_attempts','studied_credits']
+    df[conversions] = df[conversions].apply(pd.to_numeric)
+    
+    return df
       
