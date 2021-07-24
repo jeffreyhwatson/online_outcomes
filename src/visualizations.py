@@ -5,7 +5,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-from src import functions as fn
+from src import helper_functions as fn
 
 def outcomes_type(df):
     res = df.final_result.value_counts(normalize=True)\

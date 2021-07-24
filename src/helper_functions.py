@@ -19,7 +19,7 @@ conn = sqlite3.connect(data_path)
 cur = conn.cursor()
 
 # importing custom classes
-from src import classes as c
+# from src import classes as c
 
 def db_create(file_name, database_name):
     """Creates and populates an sqlite database from zipped csv files."""
@@ -134,9 +134,8 @@ def df_fixes(df):
     col = 'final_result'
     first_col = df.pop(col)
     df.insert(0, col, first_col)
-    df.head()
     # dropping nulls
-    df.dropna(inplace=True)
+    df = df.dropna()
     # fixing typo
     df['imd_band'] = df['imd_band'].replace(['10-20'], '10-20%')
     # renaming values
@@ -171,6 +170,5 @@ def sv_si():
     SV.code_presentation,
     SV.id_student;
     """
-    df = pd.DataFrame(fetch(cur, q))
-    df.columns = [i[0] for i in cur.description]
+    df = pd.read_sql(q, self.conn)
     return df_fixes(df) 
