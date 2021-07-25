@@ -13,7 +13,7 @@ def outcomes_type(df):
 
     fig, ax = plt.subplots(figsize=(16,8))
     sns.barplot(x='percentage', y ='index',
-                data=res, palette='winter_r')
+                data=res, palette='GnBu_r', edgecolor='lightseagreen')
     plt.title('Share of Outcomes by Type', fontsize=25)
     plt.ylabel('', fontsize=20)
     plt.xlabel('Percentage of Total Outcomes', fontsize=20)
@@ -27,7 +27,8 @@ def outcomes_imd(df):
 
     fig, ax = plt.subplots(figsize=(16,8))
     sns.barplot(x='percentage', y ='final_result',
-                data=imd,  hue='imd_band', palette='winter_r')
+                data=imd,  hue='imd_band', palette='GnBu_r',
+                edgecolor='lightseagreen')
     plt.title('Share of Outcomes by IMD Band', fontsize=25)
     plt.ylabel('')
     plt.xlabel('Percentage of Outcome', fontsize=20)
@@ -42,7 +43,8 @@ def outcomes_dis(df):
 
     fig, ax = plt.subplots(figsize=(16,8))
     sns.barplot(x='percentage', y ='final_result',
-                data=dis,  hue='disability', palette='winter_r')
+                data=dis,  hue='disability', palette='GnBu_r',
+                edgecolor='lightseagreen')
     plt.title('Share of Outcomes by Disability Status', fontsize=25)
     plt.ylabel(' ')
     plt.xlabel('Percentage of Outcome', fontsize=20)
@@ -58,7 +60,8 @@ def outcomes_age(df):
 
     fig, ax = plt.subplots(figsize=(16,8))
     sns.barplot(x='percentage', y ='final_result',
-                data=age,  hue='age_band', palette='winter_r')
+                data=age,  hue='age_band', palette='GnBu_r',
+                edgecolor='lightseagreen')
     plt.title('Share of Outcomes by Age Band', fontsize=25)
     plt.ylabel(' ')
     plt.xlabel('Percentage of Outcome', fontsize=20)
@@ -73,7 +76,8 @@ def outcomes_edu(df):
 
     fig, ax = plt.subplots(figsize=(16,8))
     sns.barplot(x='percentage', y ='final_result',
-                data=edu,  hue='highest_education', palette='winter_r')
+                data=edu,  hue='highest_education', palette='GnBu_r',
+                edgecolor='lightseagreen')
     plt.title('Share of Outcomes by Education Level', fontsize=25)
     plt.ylabel(' ')
     plt.xlabel('Percentage of Outcome', fontsize=20)
@@ -88,7 +92,8 @@ def outcomes_gen(df):
 
     fig, ax = plt.subplots(figsize=(16,8))
     sns.barplot(x='percentage', y ='final_result',
-                data=gen,  hue='gender', palette='winter_r')
+                data=gen,  hue='gender', palette='GnBu_r',
+                edgecolor='lightseagreen')
     plt.title('Share of Outcomes by Gender', fontsize=25)
     plt.ylabel(' ')
     plt.xlabel('Percentage of Outcome', fontsize=20)
@@ -103,7 +108,8 @@ def outcomes_reg(df):
 
     fig, ax = plt.subplots(figsize=(16,8))
     sns.barplot(x='percentage', y ='final_result',
-                data=reg,  hue='region', palette='winter_r')
+                data=reg,  hue='region', palette='GnBu_r',
+                edgecolor='lightseagreen')
     plt.title('Share of Outcomes by Region', fontsize=25)
     plt.ylabel(' ')
     plt.xlabel('Percentage of Outcome', fontsize=20)
@@ -118,7 +124,8 @@ def outcome_cl(df):
     
     fig, ax=plt.subplots(figsize=(20,8))
     sns.barplot(x='percentage', y='final_result', hue='course_load',\
-                data=stu)
+                data=stu, palette='GnBu_r',
+                edgecolor='lightseagreen')
     plt.title('Outcomes By Course Load', fontsize=25)
     plt.xlabel('Percentage Of Outcome', fontsize=20)
     plt.ylabel('')
@@ -132,7 +139,8 @@ def outcome_clks(df):
     .mean().reset_index(name='mean_clicks')
     
     fig, ax=plt.subplots(figsize=(20,8))
-    sns.barplot(x='mean_clicks', y='final_result', data=clix)
+    sns.barplot(x='mean_clicks', y='final_result', data=clix, palette='GnBu_r',
+                edgecolor='lightseagreen')
     plt.title('Mean Clicks Per Outcome', fontsize=25)
     plt.xlabel('Mean Number Of Clicks', fontsize=20)
     plt.yticks(fontsize=20)
@@ -141,6 +149,21 @@ def outcome_clks(df):
 #                 pad_inches = .25, transparent = False)    
     plt.show()
 
+def heat_map(corr):
+    """Returns a heatmap of a correlation matrix
+    
+    Args:
+        corr: A corelation matrix object.
+    """
+    mask = np.triu(np.ones_like(corr, dtype=np.bool))
+
+    fig1, ax1 = plt.subplots(figsize=(11, 9))
+    sns.heatmap(corr, mask=mask, cmap='viridis');
+#     plt.savefig('heatmap',  bbox_inches ="tight",\
+#                 pad_inches = .25, transparent = False)
+
+    
+    
 def base_coefs(pipe):
     coefs = pipe[1].coef_.flatten()
     features = pipe[0].get_feature_names()

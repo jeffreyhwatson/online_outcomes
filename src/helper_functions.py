@@ -1,7 +1,8 @@
 # importing 
-import os, sys, glob, re
-from zipfile import ZipFile
-import sqlite3
+import os, sys
+# , glob, re
+# from zipfile import ZipFile
+# import sqlite3
 import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
@@ -14,43 +15,43 @@ import matplotlib.image as img
 gparent = os.path.join(os.pardir, os.pardir)
 sys.path.append(gparent)
 
-data_path = os.path.join(gparent,'data/processed','outcomes.db')
-conn = sqlite3.connect(data_path)  
-cur = conn.cursor()
+# data_path = os.path.join(gparent,'data/processed','outcomes.db')
+# conn = sqlite3.connect(data_path)  
+# cur = conn.cursor()
 
 # importing custom classes
 # from src import classes as c
 
-def db_create(file_name, database_name):
-    """Creates and populates an sqlite database from zipped csv files."""
+# def db_create(file_name, database_name):
+#     """Creates and populates an sqlite database from zipped csv files."""
     
-    zip_path = os.path.join(gparent, 'data/raw', file_name)
-    out_path  = os.path.join(gparent, 'data/raw')
-    db_path =  os.path.join(gparent, 'data/processed', database_name)
+#     zip_path = os.path.join(gparent, 'data/raw', file_name)
+#     out_path  = os.path.join(gparent, 'data/raw')
+#     db_path =  os.path.join(gparent, 'data/processed', database_name)
     
-    # opening the zip file
-    with ZipFile(zip_path, 'r') as zip:
+#     # opening the zip file
+#     with ZipFile(zip_path, 'r') as zip:
         
-        # extracting files to raw directory
-        zip.extractall(out_path)
+#         # extracting files to raw directory
+#         zip.extractall(out_path)
         
-    # creating and connecting to database
-    conn = sqlite3.connect(db_path)  
+#     # creating and connecting to database
+#     conn = sqlite3.connect(db_path)  
     
-    # creating paths to the files
-    path = os.path.join(gparent, 'data/raw', '*.csv')
-    ps = []
-    for name in glob.glob(path):
-        ps.append(name)
+#     # creating paths to the files
+#     path = os.path.join(gparent, 'data/raw', '*.csv')
+#     ps = []
+#     for name in glob.glob(path):
+#         ps.append(name)
 
-    # creating list of tuples with names and data frames; importing data as strings
-    dfs = [(re.split('[////./]', file_path)[8], 
-            pd.read_csv(file_path, dtype=str)) for file_path in ps]
+#     # creating list of tuples with names and data frames; importing data as strings
+#     dfs = [(re.split('[////./]', file_path)[8], 
+#             pd.read_csv(file_path, dtype=str)) for file_path in ps]
 
-    # Adding data to the database using the tuples created above.
-    # Creating tables from the data frames, and naming the tables with the name strings from above.
-    for tup in dfs:
-        tup[1].to_sql(tup[0].upper(), conn, if_exists='append', index = False)
+#     # Adding data to the database using the tuples created above.
+#     # Creating tables from the data frames, and naming the tables with the name strings from above.
+#     for tup in dfs:
+#         tup[1].to_sql(tup[0].upper(), conn, if_exists='append', index = False)
 
 def fetch(cur, q):
     """Returns an SQL query."""
@@ -84,7 +85,14 @@ def precision(y_true, y_pred):
 # creating scorer object for cv
 precision = make_scorer(precision)
 
-def splitter(X, y):
+def X_y(df):
+    """Returns a data frame and target series."""
+    
+    X = df.drop('target', axis=1)
+    y = df['target']
+    return X, y
+
+def test_train(X, y):
     """Returns a train/test split."""
     
     X_train, X_test, y_train, y_test = train_test_split(X, y,
@@ -104,8 +112,9 @@ def confusion_report(model, X, y):
     
     fig, ax = plt.subplots(figsize=(7, 7))
     plot_confusion_matrix(model, X, y,
-                          cmap=plt.cm.Blues, 
-                          display_labels=['Positive', 'Negative'], ax=ax)
+                          cmap='GnBu_r',
+                          display_labels=
+                          ['Unsatisfactory', 'Satisfactory'], ax=ax)
     plt.title('Confusion Matrix')
     plt.grid(False)
 #     plt.savefig('dummy',  bbox_inches ="tight",\
@@ -150,25 +159,25 @@ def df_fixes(df):
                                   duplicates='drop')
     return df
 
-def sv_si():
-    """Making new df by joining studentinfo and studentvle tables
-       and creating a click_sum column."""
+# def sv_si():
+#     """Making new df by joining studentinfo and studentvle tables
+#        and creating a click_sum column."""
     
-    q = """
-    SELECT SV.*, 
-    SUM(SV.sum_click) AS click_sum,
-    SI.*
-    FROM 
-    STUDENTVLE as SV
-    JOIN 
-    STUDENTINFO as SI
-    ON SV.code_module = SI.code_module
-    AND SV.code_presentation = SI.code_presentation
-    AND SV.id_student = SI.id_student
-    GROUP BY 
-    SV.code_module,
-    SV.code_presentation,
-    SV.id_student;
-    """
-    df = pd.read_sql(q, self.conn)
-    return df_fixes(df) 
+#     q = """
+#     SELECT SV.*, 
+#     SUM(SV.sum_click) AS click_sum,
+#     SI.*
+#     FROM 
+#     STUDENTVLE as SV
+#     JOIN 
+#     STUDENTINFO as SI
+#     ON SV.code_module = SI.code_module
+#     AND SV.code_presentation = SI.code_presentation
+#     AND SV.id_student = SI.id_student
+#     GROUP BY 
+#     SV.code_module,
+#     SV.code_presentation,
+#     SV.id_student;
+#     """
+#     df = pd.read_sql(q, self.conn)
+#     return df_fixes(df) 

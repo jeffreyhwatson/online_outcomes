@@ -114,7 +114,19 @@ class Database:
         q= f"PRAGMA table_info({table_name})"
         return self.fetch(self.cur, q)
 
-    def df_fixes(self, df):
+    
+    def binarize_target(self, df):
+        """Binarizes target and moves column to front of data frame."""
+    
+        binarize = {'Pass': 1, 'Withdrawn': 0, 'Fail': 0, 'Distinction': 1}
+        df['target'] = df['final_result']
+        df['target'] = df['target'].map(binarize)
+        col_name = 'target'
+        first = df.pop(col_name)
+        df.insert(0, col_name, first)
+        return df
+    
+    def si_fixes(self, df):
         """Performs various fixes to the dataframe."""
     
         # dropping duplicate columns
@@ -131,12 +143,30 @@ class Database:
         df['disability'] = df['disability'].replace(['Y', 'N'], ['Yes', 'No'])
         df['gender'] = df['gender'].replace(['M', 'F'], ['Male', 'Female'])
         # converting datatypes
-        conversions = ['click_sum', 'date', 'num_of_prev_attempts','studied_credits']
+        conversions = ['studied_credits']
         df[conversions] = df[conversions].apply(pd.to_numeric)
         # adding course_load column
         df['course_load'] = pd.qcut(df.studied_credits, q=4,\
                                       labels=['Light', 'Medium', 'Heavy'],\
                                       duplicates='drop')
+        df = self.binarize_target(df)
+        df = df.drop(columns=['final_result', 'studied_credits'])
+        return df
+
+    def student_info(self):
+        """Returns dataframe from the STUDENTINFO table with various fixes."""
+        
+        q = "SELECT*FROM STUDENTINFO"
+        df = pd.read_sql(q, self.conn)
+        return self.si_fixes(df)
+    
+    def sv_fixes(self, df):
+        """Performs various fixes to the dataframe."""
+    
+        # converting datatypes
+        conversions = ['click_sum', 'date', 'num_of_prev_attempts']
+        df[conversions] = df[conversions].apply(pd.to_numeric)
+
         return df
 
     def sv_si(self):
@@ -160,4 +190,7 @@ class Database:
         SV.id_student;
         """
         df = pd.read_sql(q, self.conn)
-        return self.df_fixes(df) 
+        df = self.si_fixes(df)
+        df = self.sv_fixes(df)
+         
+        return df
