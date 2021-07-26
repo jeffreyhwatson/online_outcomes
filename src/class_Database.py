@@ -12,7 +12,7 @@ sys.path.append(gparent)
 
 class Database:
     
-#     init method
+#    init method
     
     def __init__(self, database_name):
         """Creates database, cursor, and connects to database."""
@@ -20,8 +20,7 @@ class Database:
         data_path = os.path.join(gparent,'data/processed','outcomes.db')
         self.conn = sqlite3.connect(data_path)  
         self.cur = self.conn.cursor()
-    
-    
+        
 #   attributes  
     
     # month codes used in code_presentation
@@ -149,7 +148,9 @@ class Database:
         df['course_load'] = pd.qcut(df.studied_credits, q=4,\
                                       labels=['Light', 'Medium', 'Heavy'],\
                                       duplicates='drop')
+        # binarizing target
         df = self.binarize_target(df)
+        # dropping extraneous columns
         df = df.drop(columns=['final_result', 'studied_credits'])
         return df
 
@@ -166,7 +167,8 @@ class Database:
         # converting datatypes
         conversions = ['click_sum', 'date', 'num_of_prev_attempts']
         df[conversions] = df[conversions].apply(pd.to_numeric)
-
+        # dropping extraneous column
+        df = df.drop(columns=['sum_click'])
         return df
 
     def sv_si(self):
@@ -191,6 +193,5 @@ class Database:
         """
         df = pd.read_sql(q, self.conn)
         df = self.si_fixes(df)
-        df = self.sv_fixes(df)
-         
+        df = self.sv_fixes(df)        
         return df

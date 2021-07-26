@@ -1,4 +1,8 @@
-# just a placeholder file
+import os, sys
+
+# setting project path
+gparent = os.path.join(os.pardir, os.pardir)
+sys.path.append(gparent)
 
 import pandas as pd
 import numpy as np
@@ -7,7 +11,9 @@ import seaborn as sns
 
 from src import helper_functions as fn
 
-def outcomes_type(df):
+def outcomes_type(df, plot_name=False):
+    """If a plot_name string is provided then a figure is saved to the figure directory."""
+    
     res = df.final_result.value_counts(normalize=True)\
     .reset_index(name='percentage')
 
@@ -17,11 +23,15 @@ def outcomes_type(df):
     plt.title('Share of Outcomes by Type', fontsize=25)
     plt.ylabel('', fontsize=20)
     plt.xlabel('Percentage of Total Outcomes', fontsize=20)
-#     plt.savefig('outcomes_type',  bbox_inches ="tight",\
-#                 pad_inches = .25, transparent = False)
+    path = os.path.join(gparent,'reports/figures',f'{plot_name}.png')
+    if plot_name!=False:
+        plt.savefig(path,  bbox_inches ="tight",\
+                    pad_inches = .25, transparent = False)
     plt.show()
     
-def outcomes_imd(df):
+def outcomes_imd(df, plot_name=False):
+    """If a plot_name string is provided then a figure is saved to the figure directory."""
+    
     imd = df.groupby('imd_band')['final_result']\
     .value_counts(normalize=True).reset_index(name='percentage')
 
@@ -33,11 +43,15 @@ def outcomes_imd(df):
     plt.ylabel('')
     plt.xlabel('Percentage of Outcome', fontsize=20)
     plt.legend(title='IMD Band', bbox_to_anchor= (1, 1))
-#     plt.savefig('outcomes_imd',  bbox_inches ="tight",\
-#                 pad_inches = .25, transparent = False)
+    path = os.path.join(gparent,'reports/figures',f'{plot_name}.png')
+    if plot_name!=False:
+        plt.savefig(path,  bbox_inches ="tight",\
+                    pad_inches = .25, transparent = False)
     plt.show()
-
-def outcomes_dis(df):
+    
+def outcomes_dis(df, plot_name=False):
+    """If a plot_name string is provided then a figure is saved to the figure directory."""
+    
     dis = df.groupby('disability')['final_result']\
     .value_counts(normalize=True).reset_index(name='percentage')
 
@@ -49,12 +63,16 @@ def outcomes_dis(df):
     plt.ylabel(' ')
     plt.xlabel('Percentage of Outcome', fontsize=20)
     plt.legend(title='Disability', bbox_to_anchor= (1, 1))
-#     plt.savefig('outcomes_dis',  bbox_inches ="tight",\
-#                 pad_inches = .25, transparent = False)
+    path = os.path.join(gparent,'reports/figures',f'{plot_name}.png')
+    if plot_name!=False:
+        plt.savefig(path,  bbox_inches ="tight",\
+                    pad_inches = .25, transparent = False)
     plt.show()
     
 
-def outcomes_age(df):
+def outcomes_age(df, plot_name=False):
+    """If a plot_name string is provided then a figure is saved to the figure directory."""
+    
     age = df.groupby('age_band')['final_result']\
     .value_counts(normalize=True).reset_index(name='percentage')
 
@@ -66,11 +84,15 @@ def outcomes_age(df):
     plt.ylabel(' ')
     plt.xlabel('Percentage of Outcome', fontsize=20)
     plt.legend(title='Age Band', bbox_to_anchor= (1, 1))
-#     plt.savefig('outcomes_age',  bbox_inches ="tight",\
-#     pad_inches = .25, transparent = False)
+    path = os.path.join(gparent,'reports/figures',f'{plot_name}.png')
+    if plot_name!=False:
+        plt.savefig(path,  bbox_inches ="tight",\
+                    pad_inches = .25, transparent = False)
     plt.show()
 
-def outcomes_edu(df):
+def outcomes_edu(df, plot_name=False):
+    """If a plot_name string is provided then a figure is saved to the figure directory."""
+    
     edu = df.groupby('highest_education')['final_result']\
     .value_counts(normalize=True).reset_index(name='percentage')
 
@@ -82,11 +104,15 @@ def outcomes_edu(df):
     plt.ylabel(' ')
     plt.xlabel('Percentage of Outcome', fontsize=20)
     plt.legend(title='Education Level', bbox_to_anchor= (1, 1))
-#     plt.savefig('outcomes_edu',  bbox_inches ="tight",\
-#     pad_inches = .25, transparent = False)
+    path = os.path.join(gparent,'reports/figures',f'{plot_name}.png')
+    if plot_name!=False:
+        plt.savefig(path,  bbox_inches ="tight",\
+                    pad_inches = .25, transparent = False)
     plt.show()
 
-def outcomes_gen(df):
+def outcomes_gen(df, plot_name=False):
+    """If a plot_name string is provided then a figure is saved to the figure directory."""
+    
     gen = df.groupby('gender')['final_result']\
     .value_counts(normalize=True).reset_index(name='percentage')
 
@@ -98,11 +124,15 @@ def outcomes_gen(df):
     plt.ylabel(' ')
     plt.xlabel('Percentage of Outcome', fontsize=20)
     plt.legend(title='Gender', bbox_to_anchor= (1, 1))
-#     plt.savefig('outcomes_gen',  bbox_inches ="tight",\
-#                 pad_inches = .25, transparent = False)
+    path = os.path.join(gparent,'reports/figures',f'{plot_name}.png')
+    if plot_name!=False:
+        plt.savefig(path,  bbox_inches ="tight",\
+                    pad_inches = .25, transparent = False)
     plt.show()
 
-def outcomes_reg(df):
+def outcomes_reg(df, plot_name=False):
+    """If a plot_name string is provided then a figure is saved to the figure directory."""
+    
     reg = df.groupby('region')['final_result']\
     .value_counts(normalize=True).reset_index(name='percentage')
 
@@ -114,11 +144,15 @@ def outcomes_reg(df):
     plt.ylabel(' ')
     plt.xlabel('Percentage of Outcome', fontsize=20)
     plt.legend(title='Region', bbox_to_anchor= (1, 1))
-#     plt.savefig('outcomes_reg',  bbox_inches ="tight",\
-#                 pad_inches = .25, transparent = False)
+    path = os.path.join(gparent,'reports/figures',f'{plot_name}.png')
+    if plot_name!=False:
+        plt.savefig(path,  bbox_inches ="tight",\
+                    pad_inches = .25, transparent = False)
     plt.show()
 
-def outcome_cl(df): 
+def outcome_cl(df, plot_name=False):
+    """If a plot_name string is provided then a figure is saved to the figure directory."""
+    
     stu = df.groupby('course_load')['final_result']\
     .value_counts(normalize=True).reset_index(name='percentage')
     
@@ -130,11 +164,15 @@ def outcome_cl(df):
     plt.xlabel('Percentage Of Outcome', fontsize=20)
     plt.ylabel('')
     plt.legend(title="Course Load")
-#     plt.savefig('outcomes_cl',  bbox_inches ="tight",\
-#                 pad_inches = .25, transparent = False)
+    path = os.path.join(gparent,'reports/figures',f'{plot_name}.png')
+    if plot_name!=False:
+        plt.savefig(path,  bbox_inches ="tight",\
+                    pad_inches = .25, transparent = False)
     plt.show()
 
-def outcome_clks(df):    
+def outcome_clks(df, plot_name=False):
+    """If a plot_name string is provided then a figure is saved to the figure directory."""
+    
     clix = df.groupby('final_result')['click_sum']\
     .mean().reset_index(name='mean_clicks')
     
@@ -145,13 +183,17 @@ def outcome_clks(df):
     plt.xlabel('Mean Number Of Clicks', fontsize=20)
     plt.yticks(fontsize=20)
     plt.ylabel('')
-#     plt.savefig('outcome_clks',  bbox_inches ="tight",\
-#                 pad_inches = .25, transparent = False)    
+    path = os.path.join(gparent,'reports/figures',f'{plot_name}.png')
+    if plot_name!=False:
+        plt.savefig(path,  bbox_inches ="tight",\
+                    pad_inches = .25, transparent = False)
     plt.show()
-
-def heat_map(corr):
-    """Returns a heatmap of a correlation matrix
     
+def heat_map(corr, plot_name=False):
+    """
+    Returns a heatmap of a correlation matrix
+    
+    If a plot_name string is provided then a figure is saved to the figure directory.
     Args:
         corr: A corelation matrix object.
     """
@@ -159,19 +201,22 @@ def heat_map(corr):
 
     fig1, ax1 = plt.subplots(figsize=(11, 9))
     sns.heatmap(corr, mask=mask, cmap='viridis');
-#     plt.savefig('heatmap',  bbox_inches ="tight",\
-#                 pad_inches = .25, transparent = False)
-
+    path = os.path.join(gparent,'reports/figures',f'{plot_name}.png')
+    if plot_name!=False:
+        plt.savefig(path,  bbox_inches ="tight",\
+                    pad_inches = .25, transparent = False)
+    plt.show()
     
     
-def base_coefs(pipe):
+def base_coefs(pipe, plot_name=False):
+    """If a plot_name string is provided then a figure is saved to the figure directory. """
+    
     coefs = pipe[1].coef_.flatten()
     features = pipe[0].get_feature_names()
-    features = fn.feat_cleaner(features)
     zips = zip(features, coefs)
     coef_df = pd.DataFrame(zips, columns=['feature', 'value'])
     coef_df["abs_value"] = coef_df["value"].apply(lambda x: abs(x))
-    coef_df["colors"] = coef_df["value"].apply(lambda x: "darkblue" if x > 0 else "skyblue")
+    coef_df["colors"] = coef_df["value"].apply(lambda x: "darkblue" if x > 0 else "lightseagreen")
     coef_df = coef_df.sort_values("abs_value", ascending=False)
 
     fig, ax = plt.subplots(1, 1, figsize=(20, 8))
@@ -184,66 +229,18 @@ def base_coefs(pipe):
     plt.suptitle("Top 30 Features", fontsize=30)
     ax.set_ylabel("Coefs", fontsize=22)
     ax.set_xlabel("Feature Name", fontsize=22)
-#     plt.savefig('tuned_coeff',  bbox_inches ="tight",\
-#                 pad_inches = .25, transparent = False)
-    plt.show()
-
-
-    
-def base_neg_odds(pipe):
-    coefs = pipe[1].coef_.flatten()
-    features = pipe[0].get_feature_names()
-    features = fn.feat_cleaner(features)
-
-    odds = np.exp(coefs)
-    odds_df = pd.DataFrame(odds, 
-                 features, 
-                 columns=['odds'])\
-                .sort_values(by='odds', ascending=False)
-
-    top10_neg_odds = odds_df.head(10).reset_index()
-
-    fig, ax = plt.subplots(figsize =(20, 8))
-    sns.barplot(x='index',y='odds', data=top10_neg_odds, palette='Blues_r',
-                edgecolor='deepskyblue')
-    plt.suptitle('Relative Odds For The Top 10 Negative Features', fontsize=30)
-    plt.title('Higher Bars Mean Higher Odds of a Negative Tweet', fontsize=20)
-    plt.xlabel('')
-    plt.ylabel('')
-    plt.xticks(rotation=80)
-#     plt.savefig('tuned_negative',  bbox_inches ="tight",\
-#                 pad_inches = .25, transparent = False)
-    plt.show()
-
-    
-def base_pos_odds(pipe):
-    coefs = pipe[1].coef_.flatten()
-    features = pipe[0].get_feature_names()
-    features = fn.feat_cleaner(features)
-
-    odds = np.exp(coefs)
-    odds_df = pd.DataFrame(odds, 
-                 features, 
-                 columns=['odds'])\
-                .sort_values(by='odds', ascending=True)
-    
-    top10_pos_odds = odds_df.head(10).reset_index()
-
-    top10_pos_odds['odds'] = 1/top10_pos_odds['odds']
-
-    fig, ax = plt.subplots(figsize =(20, 8))
-    sns.barplot(x='index',y='odds', data=top10_pos_odds, palette='Blues_r', edgecolor='deepskyblue')
-    plt.suptitle('Relative Odds For Top 10 Positive Features', fontsize=30)
-    plt.title('Higher Bars Mean Higher Odds of a Positive Tweet', fontsize=20)
-    plt.xlabel('')
-    plt.ylabel('')
-    plt.xticks(rotation=80)
-#     plt.savefig('tuned_positive',  bbox_inches ="tight",\
-#                 pad_inches = .25, transparent = False)
+    path = os.path.join(gparent,'reports/figures',f'{plot_name}.png')
+    if plot_name!=False:
+        plt.savefig(path,  bbox_inches ="tight",\
+                    pad_inches = .25, transparent = False)
     plt.show()
     
 def feature_plot(pipe):
-    """Returns feature importances of a model."""
+    """
+    Returns feature importances of a model.
+    
+    If a plot_name string is provided then a figure is saved to the figure directory.
+    """
     
     features = list(pipe[0].get_feature_names())
     features = fn.feat_cleaner(features)
@@ -257,6 +254,10 @@ def feature_plot(pipe):
     sns.barplot(x=x, y=y, palette='Blues_r', edgecolor='deepskyblue')
     plt.xticks(rotation=80, fontsize=20)
     plt.title('Feature Importances', fontsize=30)
-#     plt.savefig('feature_imp',  bbox_inches ="tight",\
-#                 pad_inches = .25, transparent = False)
+    path = os.path.join(gparent,'reports/figures',f'{plot_name}.png')
+    if plot_name!=False:
+        plt.savefig(path,  bbox_inches ="tight",\
+                    pad_inches = .25, transparent = False)
     plt.show()
+
+    

@@ -1,6 +1,6 @@
 # Online Outcomes: Predicting Success in Virtual Learning
 
-![graph0](./reports/figures/placeholder.jpg)
+![graph0](./reports/figures/intro.jpg)
 
 "Online Learning" by leanforward_photos is licensed under CC BY-SA 2.0
 
@@ -61,6 +61,13 @@ Data cleaning details for the project can be found here:
 # Exploring the  Data (Highlights From the EDA)
 EDA for the project is detailed in the following notebook: [Data Cleaning/EDA Notebook](./notebooks/exploratory/cleaning_eda.ipynb)
 
+![graph1](./reports/figures/outcomes_type.png)
+![graph2](./reports/figures/outcomes_imd.png)
+![graph3](./reports/figures/outcomes_dis.png)
+![graph4](./reports/figures/outcomes_age.png)
+![graph5](./reports/figures/outcomes_edu.png)
+![graph6](./reports/figures/outcomes_gen.png)
+![graph7](./reports/figures/outcomes_cl.png)
 ***
 # Modeling
 
@@ -70,9 +77,7 @@ Details of the full modeling process can be found here:
 
 ## Baseline Model:
 
-![graph8](./reports/figures/dummy.png)
-
-"Online Learning" by leanforward_photos is licensed under CC BY-SA 2.0
+![graph8](./reports/figures/baseline.png)
 
 <font size="4">Baseline Scores: F1 = 0, Recall = 0, Precision = 0</font>
 
@@ -82,13 +87,11 @@ F1 is a mix of both precision and recall, so the interpretation of the results i
 ***
 ## First Simple Model:
 
-<font size="4">Average Validation Scores: F1=, Recall=, Precision=</font>
+<font size="4">Average Validation Scores: F1 = .49, Recall = .41, Precision = .62</font>
 
+![graph18](./reports/figures/fsm.png)
 
-
-![graph18](./reports/figures/dummy.png)
-
-<font size="4">Scores on Test Data: F1 =, Recall = , Precision = </font>
+<font size="4">Scores on Test Data: F1 = .51, Recall = .43, Precision = .63</font>
 
 ### Score Interpretation
 Since F1 is a mix of both precision and recall, the interpretation of the results is more easily described in terms of recall and precision. 
@@ -102,7 +105,7 @@ Since F1 is a mix of both precision and recall, the interpretation of the result
 
 <font size="4">Average Scores: F1=, Recall=, Precision=</font>
 
-![graph12](./reports/figures/dummy.png)
+[comment]: <![graph12](./reports/figures/dummy.png)> 
 
 <font size="4">Scores on Test Data: F1=, Recall=, Precision=</font>
 
@@ -115,7 +118,7 @@ Since F1 is a mix of both precision and recall, the interpretation of the result
 <font size="4">Average Scores: F1=, Recall=, Precision=</font>
 
 
-![graph16](./reports/figures/dummy.png)
+[comment]: <![graph16](./reports/figures/dummy.png)>
 
 <font size="4">Scores on Test Data: F1=, Recall=, Precision=</font>
 

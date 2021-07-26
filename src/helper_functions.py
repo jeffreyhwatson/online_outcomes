@@ -1,5 +1,6 @@
 # importing 
 import os, sys
+import pickle
 
 import pandas as pd
 import numpy as np
@@ -10,6 +11,10 @@ from sklearn.metrics import (f1_score, recall_score, precision_score,
 
 import matplotlib.pyplot as plt
 import matplotlib.image as img
+
+# setting project path
+gparent = os.path.join(os.pardir, os.pardir)
+sys.path.append(gparent)
 
 def fetch(cur, q):
     """Returns an SQL query."""
@@ -22,7 +27,7 @@ def f_score(y_true, y_pred):
     f1 = f1_score(y_true, y_pred)
     return f1
 
-# creating scorer object for pipelines
+# creating scorer object
 f1 = make_scorer(f_score)
 
 def recall(y_true, y_pred):
@@ -31,7 +36,7 @@ def recall(y_true, y_pred):
     rec = recall_score(y_true, y_pred)
     return rec
 
-# creating scorer object for cv
+# creating scorer object
 recall = make_scorer(recall)
 
 def precision(y_true, y_pred):
@@ -40,7 +45,7 @@ def precision(y_true, y_pred):
     pre = precision_score(y_true, y_pred)
     return pre
 
-# creating scorer object for cv
+# creating scorer object
 precision = make_scorer(precision)
 
 def X_y(df):
@@ -59,9 +64,14 @@ def test_train(X, y):
                                                    )
     return  X_train, X_test, y_train, y_test
 
-def confusion_report(model, X, y):
-    """Returns a confusion matrix plot and scores."""
+def confusion_report(model, X, y, plot_name=False):
+    """
+    Returns a confusion matrix plot and scores.
     
+    If a plot_name string is provided then a figure is saved to the figure directory
+    """
+    
+    path = os.path.join(gparent,'reports/figures',f'{plot_name}.png')
     f1 = f1_score(y, model.predict(X))
     recall = recall_score(y, model.predict(X))
     precision = precision_score(y, model.predict(X),)
@@ -75,11 +85,20 @@ def confusion_report(model, X, y):
                           ['Unsatisfactory', 'Satisfactory'], ax=ax)
     plt.title('Confusion Matrix')
     plt.grid(False)
-#     plt.savefig('dummy',  bbox_inches ="tight",\
-#                 pad_inches = .25, transparent = False)
+    if plot_name != False:
+        plt.savefig(path,  bbox_inches ="tight",\
+                pad_inches = .25, transparent = False)
     plt.show()  
     
     return report
+
+def pickle_model(model, model_name):
+    """Pickles model and save to model directory."""
+    
+    path = os.path.join(gparent, 'models', f'{model_name}.pkl')
+    file = open(path, 'wb')
+    pickle.dump(model, file)
+    file.close()
 
 def binarize_target(df):
     """Binarizes target and moves column to front of data frame."""
@@ -92,7 +111,7 @@ def binarize_target(df):
     df.insert(0, col_name, first)
     return df
 
-def df_fixes(df):
+def sv_si_fixes(df):
     """Performs various fixes to the dataframe."""
     
     # dropping duplicate columns
@@ -115,4 +134,7 @@ def df_fixes(df):
     df['course_load'] = pd.qcut(df.studied_credits, q=4,\
                                   labels=['Light', 'Medium', 'Heavy'],\
                                   duplicates='drop')
-    return df
+    # dropping extraneous column
+    df = df.drop(columns=['sum_click'])
+    
+    return binarize_target(df)
