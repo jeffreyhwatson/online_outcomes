@@ -100,7 +100,7 @@ class Database:
         return tables
     
     def simple_df(self, table_name):
-        """Returns data frame made from entries in table"""
+        """Returns data frame made from all entries in table."""
         
         q = f"SELECT*FROM {table_name}"
         df = pd.read_sql(q, self.conn)
@@ -172,8 +172,9 @@ class Database:
         return df
 
     def sv_si(self):
-        """Making new df by joining studentinfo and studentvle tables
-           and creating a click_sum column."""
+        """
+        Making df joining studentinfo & studentvle and creating a click_sum column.
+        """
     
         q = """
         SELECT SV.*, 

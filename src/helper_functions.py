@@ -68,7 +68,7 @@ def confusion_report(model, X, y, plot_name=False):
     """
     Returns a confusion matrix plot and scores.
     
-    If a plot_name string is provided then a figure is saved to the figure directory
+    If a plot_name string is provided then a figure is saved to the figure directory.
     """
     
     path = os.path.join(gparent,'reports/figures',f'{plot_name}.png')
