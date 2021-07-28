@@ -189,6 +189,25 @@ def outcome_clks(df, plot_name=False):
                     pad_inches = .25, transparent = False)
     plt.show()
     
+def outcome_nact(df, plot_name=False):
+    """If a plot_name string is provided then a figure is saved to the figure directory."""
+    
+    clix = df.groupby('final_result')['num_activities']\
+    .mean().reset_index(name='mean_activities')
+    
+    fig, ax=plt.subplots(figsize=(20,8))
+    sns.barplot(x='mean_activities', y='final_result', data=clix, palette='GnBu_r',
+                edgecolor='lightseagreen')
+    plt.title('Mean Activities Per Outcome', fontsize=25)
+    plt.xlabel('Mean Number Of Activities', fontsize=20)
+    plt.yticks(fontsize=20)
+    plt.ylabel('')
+    path = os.path.join(gparent,'reports/figures',f'{plot_name}.png')
+    if plot_name!=False:
+        plt.savefig(path,  bbox_inches ="tight",\
+                    pad_inches = .25, transparent = False)
+    plt.show()
+    
 def heat_map(corr, plot_name=False):
     """
     Returns a heatmap of a correlation matrix

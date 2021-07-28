@@ -128,7 +128,8 @@ def sv_si_fixes(df):
     df['disability'] = df['disability'].replace(['Y', 'N'], ['Yes', 'No'])
     df['gender'] = df['gender'].replace(['M', 'F'], ['Male', 'Female'])
     # converting datatypes
-    conversions = ['click_sum', 'date', 'num_of_prev_attempts','studied_credits']
+    conversions = ['click_sum','num_activities','date',
+                   'num_of_prev_attempts','studied_credits']
     df[conversions] = df[conversions].apply(pd.to_numeric)
     # adding course_load column
     df['course_load'] = pd.qcut(df.studied_credits, q=4,\

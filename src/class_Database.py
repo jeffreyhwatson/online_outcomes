@@ -151,7 +151,7 @@ class Database:
         # binarizing target
         df = self.binarize_target(df)
         # dropping extraneous columns
-        df = df.drop(columns=['final_result', 'studied_credits'])
+        df = df.drop(columns=['id_student', 'final_result', 'studied_credits'])
         return df
 
     def student_info(self):
@@ -165,10 +165,10 @@ class Database:
         """Performs various fixes to the dataframe."""
     
         # converting datatypes
-        conversions = ['click_sum', 'date', 'num_of_prev_attempts']
+        conversions = ['click_sum', 'num_activities','num_of_prev_attempts']
         df[conversions] = df[conversions].apply(pd.to_numeric)
         # dropping extraneous column
-        df = df.drop(columns=['sum_click'])
+        df = df.drop(columns=['sum_click', 'date', 'id_site'])
         return df
 
     def sv_si(self):
@@ -179,6 +179,7 @@ class Database:
         q = """
         SELECT SV.*, 
         SUM(SV.sum_click) AS click_sum,
+        COUNT(SV.sum_click) AS num_activities,
         SI.*
         FROM 
         STUDENTVLE as SV
