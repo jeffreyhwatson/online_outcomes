@@ -34,7 +34,7 @@
 
 #### Create & Activate Environment
 `cd` into the project folder and run `conda env create --file
-online_outcomes.yml` in your terminal. Next, run `conda activate online_outcomes`.
+oo.yml` in your terminal. Next, run `conda activate oo`.
 ***
 ## Overview:
 
@@ -79,26 +79,24 @@ Details of the full modeling process can be found here:
 
 ![graph8](./reports/figures/baseline.png)
 
-<font size="4">Baseline Scores: F1 = 0, Recall = 0, Precision = 0</font>
+<font size="4">Baseline Scores: Accuracy=.53, F1 = 0, Recall = 0, Precision = 0</font>
 
 #### Score Interpretation
-F1 is a mix of both precision and recall, so the interpretation of the results is more easily given in terms of recall and precision. 
 
 ***
 ## First Simple Model:
 
-<font size="4">Average Validation Scores: F1 = .49, Recall = .41, Precision = .62</font>
+<font size="4">Average Validation Scores: Accuracy=.61, F1 = .56, Recall = .53, Precision = .60</font>
 
 ![graph18](./reports/figures/fsm.png)
 
-<font size="4">Scores on Test Data: F1 = .51, Recall = .43, Precision = .63</font>
+<font size="4">Scores on Test Data: Accuracy=.61, F1 = .56, Recall = .53, Precision = .60</font>
 
 ### Score Interpretation
-Since F1 is a mix of both precision and recall, the interpretation of the results is more easily described in terms of recall and precision. 
 
 ***
-#### Feature Engineering & Intermediate Models
-
+## Feature Engineering & Intermediate Models
+![graph12](./reports/figures/modeling_history.png)
 ***
 ## Final Model:
 <font size="4"> </font>
