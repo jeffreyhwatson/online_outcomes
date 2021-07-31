@@ -149,6 +149,17 @@ def pickle_model(model, model_name):
     pickle.dump(model, file)
     file.close()
 
+def col_pop(df, column, index=False):
+    """Moves column to index given"""
+    
+    if index == False:
+        index = 0
+    else:
+        index=index
+    col_name = column
+    col = df.pop(col_name)
+    return df.insert(index ,col_name, col)    
+    
 def binarize_target(df):
     """Binarizes target and moves column to front of data frame."""
     

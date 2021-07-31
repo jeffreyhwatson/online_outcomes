@@ -207,6 +207,62 @@ def outcome_nact(df, plot_name=False):
         plt.savefig(path,  bbox_inches ="tight",\
                     pad_inches = .25, transparent = False)
     plt.show()
+
+    
+def outcomes_wa(df, plot_name=False):
+    """If a plot_name string is provided then a figure is saved to the figure directory."""
+    
+    mwa = df.groupby('final_result')['weighted_ave'].mean()\
+    .reset_index(name='mean_wa').round()
+    fig, ax = plt.subplots(figsize=(16,8))
+    sns.barplot(x='mean_wa', y ='final_result',
+                data=mwa, palette='GnBu_r',
+                edgecolor='lightseagreen')
+    plt.title('Outcome by Assessment Weighted Average', fontsize=25)
+    plt.ylabel('')
+    plt.xlabel('Mean Assessment Score Weighted Average', fontsize=20)
+    path = os.path.join(gparent,'reports/figures',f'{plot_name}.png')
+    if plot_name!=False:
+        plt.savefig(path,  bbox_inches ="tight",\
+                    pad_inches = .25, transparent = False)
+    plt.show()
+    
+def outcomes_med(df, plot_name=False):
+    """If a plot_name string is provided then a figure is saved to the figure directory."""
+    
+    mms = df.groupby('final_result')['median_score'].mean()\
+    .reset_index(name='mean_ms').round()
+    fig, ax = plt.subplots(figsize=(16,8))
+    sns.barplot(x='mean_ms', y ='final_result',
+                data=mms, palette='GnBu_r',
+                edgecolor='lightseagreen')
+    plt.title('Outcome by Median Assessment Score', fontsize=25)
+    plt.ylabel('')
+    plt.xlabel('Average Median Assessment Score', fontsize=20)
+    path = os.path.join(gparent,'reports/figures',f'{plot_name}.png')
+    if plot_name!=False:
+        plt.savefig(path,  bbox_inches ="tight",\
+                    pad_inches = .25, transparent = False)
+    plt.show()
+
+def outcomes_mean(df, plot_name=False):
+    """If a plot_name string is provided then a figure is saved to the figure directory."""
+    
+    mes = df.groupby('final_result')['mean_score'].mean()\
+    .reset_index(name='mean_score').round()
+    fig, ax = plt.subplots(figsize=(16,8))
+    sns.barplot(x='mean_score', y ='final_result',
+                data=mes, palette='GnBu_r',
+                edgecolor='lightseagreen')
+    plt.title('Outcome by Mean Assessment Score', fontsize=25)
+    plt.ylabel('')
+    plt.xlabel('Average Mean Assessment Score', fontsize=20)
+    path = os.path.join(gparent,'reports/figures',f'{plot_name}.png')
+    if plot_name!=False:
+        plt.savefig(path,  bbox_inches ="tight",\
+                    pad_inches = .25, transparent = False)
+    plt.show()
+    
     
 def heat_map(corr, plot_name=False):
     """

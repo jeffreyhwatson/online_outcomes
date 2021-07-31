@@ -68,6 +68,8 @@ EDA for the project is detailed in the following notebook: [Data Cleaning/EDA No
 ![graph5](./reports/figures/outcomes_edu.png)
 ![graph6](./reports/figures/outcomes_gen.png)
 ![graph7](./reports/figures/outcomes_cl.png)
+![graph19](./reports/figures/outcomes_med.png)
+![graph20](./reports/figures/outcomes_wa.png)
 ***
 # Modeling
 
