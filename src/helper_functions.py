@@ -139,7 +139,7 @@ def df_plot(df, plot_name=False):
     """Saves a plot of a data frame to the figure directory."""
     
     path = os.path.join(gparent,'reports/figures',f'{plot_name}.png')
-    dfi.export(df,f'{path}')
+    dfi.export(df,f'{path}', max_rows=-1)
 
 def pickle_model(model, model_name):
     """Pickles model and save to model directory."""
