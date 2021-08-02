@@ -5,6 +5,7 @@ from zipfile import ZipFile
 import sqlite3
 import matplotlib.pyplot as plt
 from IPython.display import Image
+from src import helper_functions as f
 
 # setting project path
 gparent = os.path.join(os.pardir, os.pardir)
@@ -113,62 +114,64 @@ class Database:
         q= f"PRAGMA table_info({table_name})"
         return self.fetch(self.cur, q)
 
-    
-    def binarize_target(self, df):
-        """Binarizes target and moves column to front of data frame."""
-    
-        binarize = {'Pass': 1, 'Withdrawn': 0, 'Fail': 0, 'Distinction': 1}
-        df['target'] = df['final_result']
-        df['target'] = df['target'].map(binarize)
-        col_name = 'target'
-        first = df.pop(col_name)
-        df.insert(0, col_name, first)
-        return df
-    
-    def si_fixes(self, df):
-        """Performs various fixes to the dataframe."""
-    
-        # dropping duplicate columns
-        df = df.T.drop_duplicates().T
-        # moving final_result to front of df
-        col = 'final_result'
-        first_col = df.pop(col)
-        df.insert(0, col, first_col)
-        # dropping nulls
-        df = df.dropna()
-        # fixing typo
-        df['imd_band'] = df['imd_band'].replace(['10-20'], '10-20%')
-        # renaming values
-        df['disability'] = df['disability'].replace(['Y', 'N'], ['Yes', 'No'])
-        df['gender'] = df['gender'].replace(['M', 'F'], ['Male', 'Female'])
-        # converting datatypes
-        conversions = ['studied_credits']
-        df[conversions] = df[conversions].apply(pd.to_numeric)
-        # adding course_load column
-        df['course_load'] = pd.qcut(df.studied_credits, q=4,\
-                                      labels=['Light', 'Medium', 'Heavy'],\
-                                      duplicates='drop')
-        # binarizing target
-        df = self.binarize_target(df)
-        # dropping extraneous columns
-        df = df.drop(columns=['id_student', 'final_result', 'studied_credits'])
-        return df
-
     def student_info(self):
         """Returns dataframe from the STUDENTINFO table with various fixes."""
         
-        q = "SELECT*FROM STUDENTINFO"
+        q = """
+        SELECT SI.*,
+        /* creating the row_id column by concatenation*/
+        SI.code_module || SI.code_presentation || SI.id_student AS row_id,
+        /* creating binarized target column*/
+        iif(SI.final_result='Pass' OR SI.final_result='Distinction', 1, 0) AS target
+        FROM STUDENTINFO AS SI"""
         df = pd.read_sql(q, self.conn)
-        return self.si_fixes(df)
+        return df
     
+    def pipe_cleaner(self, df, col_list):
+        def drop_cols(df, col_list):
+            df = df.drop(col_list, axis=1)
+            return df
+        def null_zap(df):
+            df = df.dropna()
+            return df
+        def replace_vals(df):
+            # fixing typo
+            df['imd_band'] = df['imd_band'].replace(['10-20'], '10-20%')
+            # renaming values
+            df['disability'] = df['disability'].replace(['Y', 'N'], ['Yes', 'No'])
+            df['gender'] = df['gender'].replace(['M', 'F'], ['Male', 'Female'])
+            return df
+        def drop_outliers_sc(df):
+            Q1 = df.studied_credits.quantile(0.25)
+            Q3 = df.studied_credits.quantile(0.75)
+            IQR = Q3 - Q1
+            df = df[~((df.studied_credits < (Q1 - 1.5 * IQR))\
+                                  |(df.studied_credits > (Q3 + 1.5 * IQR)))].copy()
+            return df
+        df = (df.pipe(replace_vals).pipe(null_zap).pipe(drop_outliers_sc)
+              .pipe(drop_cols, col_list))
+        return df
+     
     def sv_fixes(self, df):
         """Performs various fixes to the dataframe."""
     
         # converting datatypes
         conversions = ['click_sum', 'num_activities','num_of_prev_attempts']
         df[conversions] = df[conversions].apply(pd.to_numeric)
-        # dropping extraneous column
-        df = df.drop(columns=['sum_click', 'date', 'id_site'])
+        return df
+
+    def sql_fixes(self, df):
+        """Performs various fixes to the dataframe."""
+    
+        # moving target & row_id to front of df
+        f.col_pop(df, 'target')
+        f.col_pop(df, 'row_id', 1)
+        conversions = ['target', 'studied_credits']
+        df[conversions] = df[conversions].apply(pd.to_numeric)
+        # adding course_load column
+        df['course_load'] = pd.qcut(df.studied_credits, q=4,\
+                                      labels=['Light', 'Medium', 'Heavy'],\
+                                      duplicates='drop')
         return df
 
     def sv_si(self):
@@ -177,10 +180,17 @@ class Database:
         """
     
         q = """
-        SELECT SV.*, 
+        SELECT 
+        SV.*,
+        SI.*,
+        /* creating the row_id column by concatenation*/
+        SV.code_module || SV.code_presentation || SV.id_student AS row_id,
+        /* creating the click_sum column*/
         SUM(SV.sum_click) AS click_sum,
-        COUNT(SV.sum_click) AS num_activities,
-        SI.*
+        /* creating the num_activities column*/
+        COUNT(SV.sum_click) AS num_activities,        
+        /* creating binarized target column*/
+        iif(SI.final_result='Pass' OR SI.final_result='Distinction', 1, 0) AS target
         FROM 
         STUDENTVLE as SV
         JOIN 
@@ -193,7 +203,88 @@ class Database:
         SV.code_presentation,
         SV.id_student;
         """
+
         df = pd.read_sql(q, self.conn)
-        df = self.si_fixes(df)
-        df = self.sv_fixes(df)        
+        # dropping duplicate columns
+        df = df.T.drop_duplicates().T
+        df = self.sql_fixes(df)
+        df = self.sv_fixes(df)
+
         return df
+    
+    def df_a(self):
+        # creating SVLE & SINFO df
+        sv_si = self.sv_si()
+        #creating ASSESSMENT df
+        assess_df = self.simple_df('ASSESSMENTS')
+        #creating STUDENTASSESSMENT df
+        stuassess = self.simple_df('STUDENTASSESSMENT')
+        # converting score DType
+        stuassess['score'] = stuassess['score'].apply(pd.to_numeric)
+        # getting each student's mean score
+        mean_scores = stuassess.groupby(['id_student'])['score'].mean()\
+        .reset_index(name='mean_score')
+        #merging the dfs
+        sv_si = sv_si.merge(mean_scores, on='id_student')
+        # getting each student's median score
+        median_scores = stuassess.groupby(['id_student'])['score'].median()\
+        .reset_index(name='median_score')
+        # merging median_scores to sv_si
+        sv_si = sv_si.merge(median_scores, on='id_student')
+        # merging assess & student_assessment data
+        sv_si_sa = stuassess.merge(sv_si, on='id_student')
+        # dropping dupe columns before merge
+        drops = ['code_module', 'code_presentation', 'date', 'assessment_type']
+        assess_df = assess_df.drop(drops, axis=1)
+        # merging assess & student_assessment data
+        sv_si_sa = sv_si_sa.merge(assess_df, on='id_assessment')
+        # dropping extraneous columns before merge
+        drops = ['code_module', 'code_presentation', 'id_student']
+        sv_si_sa = sv_si_sa.drop(drops, axis=1)
+        # decimalizing weight
+        sv_si_sa['weight'] = sv_si_sa['weight'].apply(pd.to_numeric)*.01
+        # getting adjusted scores
+        sv_si_sa['adj_score'] = sv_si_sa['score']*sv_si_sa['weight']
+        # weighted_ave df
+        weighted_ave = sv_si_sa.groupby('row_id')['adj_score']\
+        .sum().reset_index().rename(columns={'adj_score': 'weighted_ave'})
+        # merging dfs
+        sv_si = sv_si.merge(weighted_ave, on='row_id')
+        # applying fixes
+        sv_si = self.sql_fixes(sv_si)
+        sv_si = self.sv_fixes(sv_si)
+        return sv_si
+    
+    def pipe_cleaner_wa(self, df, col_list):
+        def drop_cols(df, col_list):
+            df = df.drop(col_list, axis=1)
+            return df
+        def null_zap(df):
+            df = df.dropna()
+            return df
+        def replace_vals(df):
+            # fixing typo
+            df['imd_band'] = df['imd_band'].replace(['10-20'], '10-20%')
+            # renaming values
+            df['disability'] = df['disability'].replace(['Y', 'N'], ['Yes', 'No'])
+            df['gender'] = df['gender'].replace(['M', 'F'], ['Male', 'Female'])
+            return df
+        def drop_outliers_sc(df):
+            Q1 = df.studied_credits.quantile(0.25)
+            Q3 = df.studied_credits.quantile(0.75)
+            IQR = Q3 - Q1
+            df = df[~((df.studied_credits < (Q1 - 1.5 * IQR))\
+                                  |(df.studied_credits > (Q3 + 1.5 * IQR)))].copy()
+            return df
+        def drop_outliers_wa(df):
+            Q1 = df.weighted_ave.quantile(0.25)
+            Q3 = df.weighted_ave.quantile(0.75)
+            IQR = Q3 - Q1
+            df = df[~((df.weighted_ave < (Q1 - 1.5 * IQR))\
+                                  |(df.weighted_ave > (Q3 + 1.5 * IQR)))].copy()
+            return df
+        df = (df.pipe(replace_vals).pipe(null_zap)
+              .pipe(drop_outliers_sc).pipe(drop_outliers_wa)
+              .pipe(drop_cols, col_list))
+        return df
+    
