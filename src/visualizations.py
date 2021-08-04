@@ -36,13 +36,13 @@ def outcomes_imd(df, plot_name=False):
     .value_counts(normalize=True).reset_index(name='percentage')
 
     fig, ax = plt.subplots(figsize=(16,8))
-    sns.barplot(x='percentage', y ='final_result',
-                data=imd,  hue='imd_band', palette='GnBu_r',
+    sns.barplot(x='imd_band', y ='percentage',
+                data=imd,  hue='final_result', palette='GnBu_r',
                 edgecolor='lightseagreen')
-    plt.title('Share of Outcomes by IMD Band', fontsize=25)
-    plt.ylabel('')
-    plt.xlabel('Percentage of Outcome', fontsize=20)
-    plt.legend(title='IMD Band', bbox_to_anchor= (1, 1))
+    plt.title('Relative Frequencies of Outcomes By IMD Band', fontsize=25)
+    plt.ylabel('Relative Frequency')
+    plt.xlabel('', fontsize=20)
+    plt.legend(title='Outcome', bbox_to_anchor= (1, 1))
     path = os.path.join(gparent,'reports/figures',f'{plot_name}.png')
     if plot_name!=False:
         plt.savefig(path,  bbox_inches ="tight",\
@@ -56,13 +56,13 @@ def outcomes_dis(df, plot_name=False):
     .value_counts(normalize=True).reset_index(name='percentage')
 
     fig, ax = plt.subplots(figsize=(16,8))
-    sns.barplot(x='percentage', y ='final_result',
-                data=dis,  hue='disability', palette='GnBu_r',
+    sns.barplot(x='disability', y ='percentage',
+                data=dis,  hue='final_result', palette='GnBu_r',
                 edgecolor='lightseagreen')
-    plt.title('Share of Outcomes by Disability Status', fontsize=25)
-    plt.ylabel(' ')
-    plt.xlabel('Percentage of Outcome', fontsize=20)
-    plt.legend(title='Disability', bbox_to_anchor= (1, 1))
+    plt.title('Share of Outcomes By Disability Status', fontsize=25)
+    plt.ylabel('')
+    plt.xlabel('', fontsize=20)
+    plt.legend(title='Outcome', bbox_to_anchor= (1, 1))
     path = os.path.join(gparent,'reports/figures',f'{plot_name}.png')
     if plot_name!=False:
         plt.savefig(path,  bbox_inches ="tight",\
@@ -77,13 +77,13 @@ def outcomes_age(df, plot_name=False):
     .value_counts(normalize=True).reset_index(name='percentage')
 
     fig, ax = plt.subplots(figsize=(16,8))
-    sns.barplot(x='percentage', y ='final_result',
-                data=age,  hue='age_band', palette='GnBu_r',
+    sns.barplot(x='age_band', y ='percentage',
+                data=age,  hue='final_result', palette='GnBu_r',
                 edgecolor='lightseagreen')
-    plt.title('Share of Outcomes by Age Band', fontsize=25)
+    plt.title('Share of Outcome by Age Band', fontsize=25)
     plt.ylabel(' ')
-    plt.xlabel('Percentage of Outcome', fontsize=20)
-    plt.legend(title='Age Band', bbox_to_anchor= (1, 1))
+    plt.xlabel('', fontsize=20)
+    plt.legend(title='Outcome', bbox_to_anchor= (1, 1))
     path = os.path.join(gparent,'reports/figures',f'{plot_name}.png')
     if plot_name!=False:
         plt.savefig(path,  bbox_inches ="tight",\
@@ -97,13 +97,13 @@ def outcomes_edu(df, plot_name=False):
     .value_counts(normalize=True).reset_index(name='percentage')
 
     fig, ax = plt.subplots(figsize=(16,8))
-    sns.barplot(x='percentage', y ='final_result',
-                data=edu,  hue='highest_education', palette='GnBu_r',
+    sns.barplot(x='highest_education', y ='percentage',
+                data=edu,  hue='final_result', palette='GnBu_r',
                 edgecolor='lightseagreen')
-    plt.title('Share of Outcomes by Education Level', fontsize=25)
-    plt.ylabel(' ')
-    plt.xlabel('Percentage of Outcome', fontsize=20)
-    plt.legend(title='Education Level', bbox_to_anchor= (1, 1))
+    plt.title('Percentage of Outcomes By Education Level', fontsize=25)
+    plt.ylabel('Percent')
+    plt.xlabel('', fontsize=20)
+    plt.legend(title='Outcome', bbox_to_anchor= (1, 1))
     path = os.path.join(gparent,'reports/figures',f'{plot_name}.png')
     if plot_name!=False:
         plt.savefig(path,  bbox_inches ="tight",\
@@ -153,7 +153,7 @@ def outcomes_reg(df, plot_name=False):
 def outcome_cl(df, plot_name=False):
     """If a plot_name string is provided then a figure is saved to the figure directory."""
     
-    stu = df.groupby('course_load')['final_result']\
+    stu = df.groupby('final_result')['course_load']\
     .value_counts(normalize=True).reset_index(name='percentage')
     
     fig, ax=plt.subplots(figsize=(20,8))
