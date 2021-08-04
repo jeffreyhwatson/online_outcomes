@@ -70,6 +70,7 @@ EDA for the project is detailed in the following notebook: [Data Cleaning/EDA No
 ![graph7](./reports/figures/outcomes_cl.png)
 ![graph19](./reports/figures/outcomes_med.png)
 ![graph20](./reports/figures/outcomes_wa.png)
+![graph21](./reports/figures/outcomes_al.png)
 ***
 # Modeling
 

@@ -39,9 +39,9 @@ def outcomes_imd(df, plot_name=False):
     sns.barplot(x='imd_band', y ='percentage',
                 data=imd,  hue='final_result', palette='GnBu_r',
                 edgecolor='lightseagreen')
-    plt.title('Relative Frequencies of Outcomes By IMD Band', fontsize=25)
-    plt.ylabel('Relative Frequency')
-    plt.xlabel('', fontsize=20)
+    plt.title('Percentage of Outcomes By IMD Band', fontsize=25)
+    plt.ylabel('Percentage', fontsize=20)
+    plt.xlabel('IMD Band', fontsize=20)
     plt.legend(title='Outcome', bbox_to_anchor= (1, 1))
     path = os.path.join(gparent,'reports/figures',f'{plot_name}.png')
     if plot_name!=False:
@@ -59,9 +59,10 @@ def outcomes_dis(df, plot_name=False):
     sns.barplot(x='disability', y ='percentage',
                 data=dis,  hue='final_result', palette='GnBu_r',
                 edgecolor='lightseagreen')
-    plt.title('Share of Outcomes By Disability Status', fontsize=25)
-    plt.ylabel('')
-    plt.xlabel('', fontsize=20)
+    plt.title('Percentage of Outcomes By Disability Status', fontsize=25)
+    plt.ylabel('Percentage', fontsize=20)
+    plt.xticks([0,1], labels=['Nondisabled', 'Disabled'])
+    plt.xlabel('')
     plt.legend(title='Outcome', bbox_to_anchor= (1, 1))
     path = os.path.join(gparent,'reports/figures',f'{plot_name}.png')
     if plot_name!=False:
@@ -80,9 +81,9 @@ def outcomes_age(df, plot_name=False):
     sns.barplot(x='age_band', y ='percentage',
                 data=age,  hue='final_result', palette='GnBu_r',
                 edgecolor='lightseagreen')
-    plt.title('Share of Outcome by Age Band', fontsize=25)
-    plt.ylabel(' ')
-    plt.xlabel('', fontsize=20)
+    plt.title('Percentage of Outcomes by Age Band', fontsize=25)
+    plt.ylabel('Percentage', fontsize=20)
+    plt.xlabel('Age Band', fontsize=20)
     plt.legend(title='Outcome', bbox_to_anchor= (1, 1))
     path = os.path.join(gparent,'reports/figures',f'{plot_name}.png')
     if plot_name!=False:
@@ -101,8 +102,8 @@ def outcomes_edu(df, plot_name=False):
                 data=edu,  hue='final_result', palette='GnBu_r',
                 edgecolor='lightseagreen')
     plt.title('Percentage of Outcomes By Education Level', fontsize=25)
-    plt.ylabel('Percent')
-    plt.xlabel('', fontsize=20)
+    plt.ylabel('Percentage', fontsize=20)
+    plt.xlabel('')
     plt.legend(title='Outcome', bbox_to_anchor= (1, 1))
     path = os.path.join(gparent,'reports/figures',f'{plot_name}.png')
     if plot_name!=False:
@@ -117,13 +118,13 @@ def outcomes_gen(df, plot_name=False):
     .value_counts(normalize=True).reset_index(name='percentage')
 
     fig, ax = plt.subplots(figsize=(16,8))
-    sns.barplot(x='percentage', y ='final_result',
-                data=gen,  hue='gender', palette='GnBu_r',
+    sns.barplot(x='gender', y ='percentage',
+                data=gen,  hue='final_result', palette='GnBu_r',
                 edgecolor='lightseagreen')
-    plt.title('Share of Outcomes by Gender', fontsize=25)
-    plt.ylabel(' ')
-    plt.xlabel('Percentage of Outcome', fontsize=20)
-    plt.legend(title='Gender', bbox_to_anchor= (1, 1))
+    plt.title('Percentage of Outcomes by Gender', fontsize=25)
+    plt.ylabel('Percentage', fontsize=20)
+    plt.xlabel('')
+    plt.legend(title='Outcome', bbox_to_anchor= (1, 1))
     path = os.path.join(gparent,'reports/figures',f'{plot_name}.png')
     if plot_name!=False:
         plt.savefig(path,  bbox_inches ="tight",\
@@ -137,13 +138,14 @@ def outcomes_reg(df, plot_name=False):
     .value_counts(normalize=True).reset_index(name='percentage')
 
     fig, ax = plt.subplots(figsize=(16,8))
-    sns.barplot(x='percentage', y ='final_result',
-                data=reg,  hue='region', palette='GnBu_r',
+    sns.barplot(x='region', y ='percentage',
+                data=reg,  hue='final_result', palette='GnBu_r',
                 edgecolor='lightseagreen')
-    plt.title('Share of Outcomes by Region', fontsize=25)
-    plt.ylabel(' ')
-    plt.xlabel('Percentage of Outcome', fontsize=20)
-    plt.legend(title='Region', bbox_to_anchor= (1, 1))
+    plt.title('Percentage of Outcomes by Region', fontsize=25)
+    plt.ylabel('Percentage')
+    plt.xlabel('', fontsize=20)
+    plt.xticks(rotation=60)
+    plt.legend(title='Outcome', bbox_to_anchor= (1, 1))
     path = os.path.join(gparent,'reports/figures',f'{plot_name}.png')
     if plot_name!=False:
         plt.savefig(path,  bbox_inches ="tight",\
@@ -153,17 +155,17 @@ def outcomes_reg(df, plot_name=False):
 def outcome_cl(df, plot_name=False):
     """If a plot_name string is provided then a figure is saved to the figure directory."""
     
-    stu = df.groupby('final_result')['course_load']\
+    stu = df.groupby('course_load')['final_result']\
     .value_counts(normalize=True).reset_index(name='percentage')
     
     fig, ax=plt.subplots(figsize=(20,8))
-    sns.barplot(x='percentage', y='final_result', hue='course_load',\
+    sns.barplot(x='course_load', y='percentage', hue='final_result',\
                 data=stu, palette='GnBu_r',
                 edgecolor='lightseagreen')
-    plt.title('Outcomes By Course Load', fontsize=25)
-    plt.xlabel('Percentage Of Outcome', fontsize=20)
-    plt.ylabel('')
-    plt.legend(title="Course Load")
+    plt.title('Percentage of Outcomes by Course Load', fontsize=25)
+    plt.xlabel('')
+    plt.ylabel('Percentage', fontsize=20)
+    plt.legend(title="Outcome")
     path = os.path.join(gparent,'reports/figures',f'{plot_name}.png')
     if plot_name!=False:
         plt.savefig(path,  bbox_inches ="tight",\
@@ -220,7 +222,7 @@ def outcomes_wa(df, plot_name=False):
                 edgecolor='lightseagreen')
     plt.title('Outcome by Assessment Weighted Average', fontsize=25)
     plt.ylabel('')
-    plt.xlabel('Mean Assessment Score Weighted Average', fontsize=20)
+    plt.xlabel('Mean Weighted Average of Assessment Scores', fontsize=20)
     path = os.path.join(gparent,'reports/figures',f'{plot_name}.png')
     if plot_name!=False:
         plt.savefig(path,  bbox_inches ="tight",\
@@ -238,7 +240,7 @@ def outcomes_med(df, plot_name=False):
                 edgecolor='lightseagreen')
     plt.title('Outcome by Median Assessment Score', fontsize=25)
     plt.ylabel('')
-    plt.xlabel('Average Median Assessment Score', fontsize=20)
+    plt.xlabel('Average of Median Assessment Scores', fontsize=20)
     path = os.path.join(gparent,'reports/figures',f'{plot_name}.png')
     if plot_name!=False:
         plt.savefig(path,  bbox_inches ="tight",\
@@ -256,13 +258,32 @@ def outcomes_mean(df, plot_name=False):
                 edgecolor='lightseagreen')
     plt.title('Outcome by Mean Assessment Score', fontsize=25)
     plt.ylabel('')
-    plt.xlabel('Average Mean Assessment Score', fontsize=20)
+    plt.xlabel('Average of Mean Assessment Score', fontsize=20)
     path = os.path.join(gparent,'reports/figures',f'{plot_name}.png')
     if plot_name!=False:
         plt.savefig(path,  bbox_inches ="tight",\
                     pad_inches = .25, transparent = False)
     plt.show()
+
+def outcomes_al(df, plot_name=False):
+    """If a plot_name string is provided then a figure is saved to the figure directory."""
     
+    q1a = df.groupby('final_result')['q1_activity']\
+    .value_counts(normalize=True).reset_index(name='values')
+    fig, ax = plt.subplots(figsize=(16,8))
+    sns.barplot(x='q1_activity', y ='values', hue='final_result',
+                data=q1a, palette='GnBu_r',
+                edgecolor='lightseagreen')
+    plt.title('Percentage of Outcomes by Activity Level', fontsize=25)
+    plt.ylabel('Percentage', fontsize=20)
+    plt.xlabel('')
+    plt.legend(title = 'Outcome')
+    path = os.path.join(gparent,'reports/figures',f'{plot_name}.png')
+    if plot_name!=False:
+        plt.savefig(path,  bbox_inches ="tight",\
+                    pad_inches = .25, transparent = False)    
+    plt.show()    
+
     
 def heat_map(corr, plot_name=False):
     """
