@@ -94,7 +94,7 @@ def confusion_report(model, X, y, plot_name=False):
     plot_confusion_matrix(model, X, y,
                           cmap='GnBu_r',
                           display_labels=
-                          ['Unsatisfactory', 'Satisfactory'], ax=ax)
+                          ['Satisfactory', 'Unsatisfactory'], ax=ax)
     plt.title('Confusion Matrix')
     plt.grid(False)
     if plot_name != False:
@@ -123,8 +123,8 @@ def confusion_report_nn(model, X, y, plot_name=False):
     c_matrix = confusion_matrix(y, y_preds)
     fig, ax = plt.subplots(figsize=(7,7))
     sns.heatmap(c_matrix, annot=True, fmt='d', cmap='GnBu_r',
-               xticklabels=['Unsatisfactory', 'Satisfactory'], 
-               yticklabels=['Unsatisfactory', 'Satisfactory'])
+               xticklabels=['Satisfactory', 'Unsatisfactory'], 
+               yticklabels=['Satisfactory', 'Unsatisfactory'])
     plt.title('Confusion Matrix')
     plt.yticks(rotation=0)
     plt.ylabel('True Label')
@@ -134,6 +134,66 @@ def confusion_report_nn(model, X, y, plot_name=False):
             pad_inches = .25, transparent = False)    
     plt.show()
     return report
+
+# def confusion_report_f(model, X, y, plot_name=False):
+#     """
+#     Returns a confusion matrix plot and scores.
+    
+#     If a plot_name string is provided then a figure is saved to the figure directory.
+#     """
+    
+#     path = os.path.join(gparent,'reports/figures',f'{plot_name}.png')
+#     accuracy = accuracy_score(y, model.predict(X))
+#     f1 = f1_score(y, model.predict(X))
+#     recall = recall_score(y, model.predict(X))
+#     precision = precision_score(y, model.predict(X),)
+#     report = pd.DataFrame([[accuracy, f1, recall, precision]],\
+#                           columns=['Accuracy', 'F1', 'Recall', 'Precision']) 
+    
+#     fig, ax = plt.subplots(figsize=(7, 7))
+#     plot_confusion_matrix(model, X, y,
+#                           cmap='GnBu_r',
+#                           display_labels=
+#                           ['Unsatisfactory', 'Satisfactory'], ax=ax)
+#     plt.title('Confusion Matrix')
+#     plt.grid(False)
+#     if plot_name != False:
+#         plt.savefig(path,  bbox_inches ="tight",\
+#                 pad_inches = .25, transparent = False)
+#     plt.show()  
+    
+#     return report
+
+# def confusion_report_nn_f(model, X, y, plot_name=False):
+#     """
+#     Returns a confusion matrix plot and scores.
+    
+#     If a plot_name string is provided then a figure is saved to the figure directory.
+#     """
+    
+#     path = os.path.join(gparent,'reports/figures',f'{plot_name}.png')
+#     accuracy = accuracy_score(y, model.predict(X))
+#     f1 = f1_score(y, model.predict(X))
+#     recall = recall_score(y, model.predict(X))
+#     precision = precision_score(y, model.predict(X))
+#     report = pd.DataFrame([[accuracy, f1, recall, precision]],\
+#                           columns=['Accuracy', 'F1', 'Recall', 'Precision'])    
+#     y_prob = model.predict(X)
+#     y_preds = np.where(y_prob > .5, 1,0) 
+#     c_matrix = confusion_matrix(y, y_preds)
+#     fig, ax = plt.subplots(figsize=(7,7))
+#     sns.heatmap(c_matrix, annot=True, fmt='d', cmap='GnBu_r',
+#                xticklabels=['Satisfactory', 'Unsatisfactory'], 
+#                yticklabels=['Satisfactory', 'Unsatisfactory'])
+#     plt.title('Confusion Matrix')
+#     plt.yticks(rotation=0)
+#     plt.ylabel('True Label')
+#     plt.xlabel('Predicted Label')
+#     if plot_name != False:
+#         plt.savefig(path,  bbox_inches ="tight",\
+#             pad_inches = .25, transparent = False)    
+#     plt.show()
+#     return report
 
 def df_plot(df, plot_name=False):
     """Saves a plot of a data frame to the figure directory."""

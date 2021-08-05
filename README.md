@@ -82,18 +82,18 @@ Details of the full modeling process can be found here:
 
 ![graph8](./reports/figures/baseline.png)
 
-<font size="4">Baseline Scores: Accuracy=.53, F1 = 0, Recall = 0, Precision = 0</font>
+<font size="4">Baseline Scores: Accuracy=.53, F1 = .69, Recall = 1, Precision = .53</font>
 
 #### Score Interpretation
 
 ***
 ## First Simple Model:
 
-<font size="4">Average Validation Scores: Accuracy=.61, F1 = .56, Recall = .53, Precision = .60</font>
+<font size="4">Average Validation Scores: Accuracy=.59, F1 = .63, Recall = .66, Precision = .60</font>
 
 ![graph18](./reports/figures/fsm.png)
 
-<font size="4">Scores on Test Data: Accuracy=.61, F1 = .56, Recall = .53, Precision = .60</font>
+<font size="4">Scores on Test Data: Accuracy=.59, F1 = .63, Recall = .65, Precision = .61</font>
 
 ### Score Interpretation
 
