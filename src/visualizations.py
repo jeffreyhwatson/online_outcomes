@@ -265,16 +265,16 @@ def outcomes_mean(df, plot_name=False):
                     pad_inches = .25, transparent = False)
     plt.show()
 
-def outcomes_al(df, plot_name=False):
+def outcomes_qc(df, plot_name=False):
     """If a plot_name string is provided then a figure is saved to the figure directory."""
     
-    q1a = df.groupby('final_result')['q1_activity']\
+    q1a = df.groupby('final_result')['q1_clicks']\
     .value_counts(normalize=True).reset_index(name='values')
     fig, ax = plt.subplots(figsize=(16,8))
-    sns.barplot(x='q1_activity', y ='values', hue='final_result',
+    sns.barplot(x='q1_clicks', y ='values', hue='final_result',
                 data=q1a, palette='GnBu_r',
                 edgecolor='lightseagreen')
-    plt.title('Percentage of Outcomes by Activity Level', fontsize=25)
+    plt.title('Percentage of Outcomes by Q1 Click Levels', fontsize=25)
     plt.ylabel('Percentage', fontsize=20)
     plt.xlabel('')
     plt.legend(title = 'Outcome')
