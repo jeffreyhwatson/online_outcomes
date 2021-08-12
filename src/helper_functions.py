@@ -195,6 +195,7 @@ def sv_si_fixes(df):
     df['course_load'] = pd.qcut(df.studied_credits, q=4,\
                                   labels=['Light', 'Medium', 'Heavy'],\
                                   duplicates='drop')
+    df['course_load'] = df['course_load'].astype(str)
     # dropping extraneous column
     df = df.drop(columns=['sum_click'])
     
