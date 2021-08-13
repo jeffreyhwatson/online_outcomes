@@ -288,3 +288,105 @@ class Database:
               .pipe(drop_cols, col_list))
         return df
 
+    def registration_data_df(self, cutoff_date):
+        """Returns a dataframe of data with either no withdrawl date or a date after the cutoff parameter."""
+            
+        # creating registration data df
+        q="""
+        SELECT date_registration, date_unregistration,
+        /*creating row_id col*/
+        code_module || code_presentation || id_student AS row_id
+        FROM STUDENTREGISTRATION"""
+        df = pd.read_sql(q, self.conn)
+        # converting datatypes
+        converts = ['date_registration', 'date_unregistration']
+        df[converts] = df[converts].apply(pd.to_numeric)  
+        # filtering out withdrawls before the cutoff_date
+        df = df[(df.date_unregistration.isna())|\
+                (df.date_unregistration > cutoff_date)]
+        # filtering row_ids with no registration data
+        df = df[~df.date_registration.isna()]
+            
+        return df
+    
+    def median_score_df(self, cutoff_date):
+        """Returns a dataframe of data of median assessment scores upto the cutoff parameter."""
+            
+        # creating registration data df
+        df = self.simple_df('STUDENTASSESSMENT')
+        # converting datatypes
+        converts = ['date_submitted', 'score']
+        df[converts] = df[converts].apply(pd.to_numeric) 
+        # filtering out submissions after cutoff_date
+        df = df[df.date_submitted < cutoff_date]
+        # creating median_score df
+        df = df.groupby(['id_student'])['score'].median().reset_index(name='median_score')
+            
+        return df
+    
+    def student_info_assessment(self, cutoff_date):
+        """returns a dataframe of student info & assessment data upto the cutoff_date"""
+        q = f"""
+        SELECT
+        /*selecting score*/
+        SA.score,
+        /*selecting all from student info*/
+        SI.*,
+        /*changing dtype*/
+        CAST(SA.date_submitted AS INTEGER) AS date_sub,
+        /*adding course length*/
+        CAST(C.module_presentation_length AS INTEGER) AS course_length,
+        /* creating the row_id column by concatenation*/
+        SI.code_module || SI.code_presentation || SI.id_student AS row_id,
+        /* creating binarized target column*/
+        iif(SI.final_result='Pass' OR SI.final_result='Distinction', 0, 1) AS target,
+        /* creating weighted_ave column*/
+        SUM(SA.score*A.weight*.01) AS weighted_ave,
+        /* creating mean_score column*/
+        AVG(SA.score) as mean_score
+        FROM STUDENTASSESSMENT AS SA
+        JOIN
+        ASSESSMENTS AS A
+        ON A.id_assessment = SA.id_assessment
+        JOIN STUDENTINFO AS SI
+        ON SI.id_student = SA.id_student
+        JOIN COURSES AS C
+        ON SI.code_module = C.code_module
+        WHERE date_sub < {cutoff_date}
+        GROUP BY SA.id_student,
+        SI.code_module,
+        SI.code_presentation;
+        """
+        df = pd.read_sql(q, self.conn)
+        return df
+    
+    def studentvle_df(self, cutoff_date):
+        """Returns a dataframe of STUDENTVLE data upto the cutoff date."""
+        
+        q=f"""
+        SELECT
+        /*selecting all from STUDENTVLE*/
+        SV.*,
+        /* creating the row_id column by concatenation*/
+        SV.code_module || SV.code_presentation || SV.id_student AS row_id,
+        /* creating the sum_activity column*/
+        SUM(SV.sum_click) + COUNT(SV.sum_click) AS sum_activity
+        FROM
+        STUDENTVLE AS SV
+        WHERE
+        date < {cutoff_date}
+        GROUP BY 
+        SV.code_module,
+        SV.code_presentation,
+        SV.id_student;
+        """
+        df = pd.read_sql(q, self.conn)
+        return df
+    
+    def drop_outliers(self, df, col):
+        Q1 = df[col].quantile(0.25)
+        Q3 = df[col].quantile(0.75)
+        IQR = Q3 - Q1
+        df = df[~((df[col] < (Q1 - 1.5 * IQR))\
+                                |(df[col] > (Q3 + 1.5 * IQR)))].copy()
+        return df
