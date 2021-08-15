@@ -200,3 +200,23 @@ def sv_si_fixes(df):
     df = df.drop(columns=['sum_click'])
     
     return binarize_target(df)
+
+def cohens_d(sample1, sample2):
+    """
+    Returns Cohen's d value.
+    
+    Args: 
+        sample1: A pandas series or numpy array.
+        sample2: A pandas series of numpy array.
+    Returns:
+        Cohen's d value.
+    """
+    
+    diff = sample1.mean() - sample2.mean()
+    n1 = len(sample1)
+    n2 = len(sample2)
+    var1 = sample1.var(ddof=1)
+    var2 = sample2.var(ddof=1)
+    pooled_var = ((n1-1) * var1 + (n2-1) * var2) / (n1 + n2 - 2)
+    d = diff / np.sqrt(pooled_var)
+    return d
