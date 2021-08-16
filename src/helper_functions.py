@@ -4,6 +4,8 @@ import pickle
 
 import pandas as pd
 import numpy as np
+import scipy.stats as stats
+import statsmodels.api as sm
 
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import (accuracy_score, f1_score, recall_score, precision_score,
@@ -200,6 +202,31 @@ def sv_si_fixes(df):
     df = df.drop(columns=['sum_click'])
     
     return binarize_target(df)
+
+def chi_sq_test(cross_tabs):
+    chi2, p, dof, con_table = stats.chi2_contingency(cross_tabs)
+    print(f'chi-squared = {chi2}\np value= {p}\ndegrees of freedom = {dof}')
+
+def cramers_v(cross_tabs):
+    """Returns the Cramer's V values for the various categories.
+    
+    Args:
+        cross_tabs: A crosstab dataframe.
+    Returns:
+        Crarmer's V values for the various categories."""
+    
+    # getting the chi sq. stat
+    chi2 = stats.chi2_contingency(cross_tabs)[0]
+    # summing each category
+    n = cross_tabs.sum()
+    # getting the degrees of freedom
+    dof = min(cross_tabs.shape)-1
+    # returning cramer's v
+    v = np.sqrt(chi2/(n*dof))
+    # printing results
+    print(f'Cramer\'s V Degrees of Freedom = {dof}\n')
+    # returning cramer's v
+    return v
 
 def cohens_d(sample1, sample2):
     """
