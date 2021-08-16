@@ -10,6 +10,7 @@ import statsmodels.api as sm
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import (accuracy_score, f1_score, recall_score, precision_score,
                              make_scorer, plot_confusion_matrix, confusion_matrix)
+from sklearn.inspection import permutation_importance
 
 import matplotlib.pyplot as plt
 import matplotlib.image as img
@@ -227,6 +228,28 @@ def cramers_v(cross_tabs):
     print(f'Cramer\'s V Degrees of Freedom = {dof}\n')
     # returning cramer's v
     return v
+
+def perm_importances(clf, X, y, scoring):
+    """Plots the permution importances of the features.
+    
+    Args:
+        clf: A classifier.
+        X: A dataframe.
+        y: A series.
+        scoring: A string indicating the scoring object to be used.
+    """
+    importances = permutation_importance(clf, X, y, n_repeats=10,
+                                         scoring=scoring,
+                                         random_state=2021, n_jobs=-1)
+    sorted_index = importances.importances_mean.argsort()
+    data=importances.importances[sorted_index].T
+    columns = X.columns[sorted_index]
+    pi_df = pd.DataFrame(data=data, columns=columns)
+    cols = [col.replace('_', ' ').title() for col in pi_df.columns]
+    pi_df.columns = cols
+    fig, ax = plt.subplots(figsize=(20, 8))
+    sns.boxplot(data=pi_df, orient='h', palette='GnBu_r')
+    plt.show()
 
 def cohens_d(sample1, sample2):
     """
