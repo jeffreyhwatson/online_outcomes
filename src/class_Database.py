@@ -160,6 +160,7 @@ class Database:
     
     def student_info_assessment_df(self, cutoff_date):
         """returns a dataframe of student info & assessment data upto the cutoff_date"""
+        
         q = f"""
         SELECT
         /*selecting score*/
@@ -204,11 +205,12 @@ class Database:
         /* creating the row_id column by concatenation*/
         SV.code_module || SV.code_presentation || SV.id_student AS row_id,
         /* creating the sum_activity column*/
-        SUM(SV.sum_click) + COUNT(SV.sum_click) AS sum_activity
+        SUM(SV.sum_click) + COUNT(SV.sum_click) AS sum_activity,
+        CAST(SV.date AS INTEGER) AS max_date
         FROM
         STUDENTVLE AS SV
         WHERE
-        date < {cutoff_date}
+        max_date < {cutoff_date}
         GROUP BY 
         SV.code_module,
         SV.code_presentation,
@@ -219,6 +221,7 @@ class Database:
 
     def data_prep(self, cutoff_date):
         """Returns a data frame created from several tables."""
+        
         reg_data = self.registration_data_df(cutoff_date)
         median_score = self.median_score_df(cutoff_date)
         student_vle = self.studentvle_df(cutoff_date)

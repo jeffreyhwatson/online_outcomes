@@ -284,7 +284,7 @@ def outcomes_qc(df, plot_name=False):
                     pad_inches = .25, transparent = False)    
     plt.show()    
 
-def importance_plot(pipeline, X, plot_name):
+def importance_plot(pipeline, X, plot_name=False):
     """Returns feature importances of a classifier."""
     
     features = list(pipeline[0].transformers_[0][1].get_feature_names()) +\
@@ -304,7 +304,7 @@ def importance_plot(pipeline, X, plot_name):
                     pad_inches = .25, transparent = False)
     plt.show()
     
-def importance_plot_bclf(pipeline, X, plot_name):
+def importance_plot_bclf(pipeline, X, plot_name=False):
     """Returns feature importances of a classifier."""
     
     features = list(pipeline[0].transformers_[0][1].get_feature_names()) +\
@@ -325,7 +325,7 @@ def importance_plot_bclf(pipeline, X, plot_name):
                     pad_inches = .25, transparent = False)
     plt.show()    
     
-def importance_plot_sm(pipeline, X, plot_name):
+def importance_plot_sm(pipeline, X, plot_name=False):
     """Returns feature importances of a classifier."""
     
     features = list(pipeline[0].transformers_[0][1].get_feature_names()) +\
