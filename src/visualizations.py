@@ -284,76 +284,63 @@ def outcomes_qc(df, plot_name=False):
                     pad_inches = .25, transparent = False)    
     plt.show()    
 
+def importance_plot(pipeline, X, plot_name):
+    """Returns feature importances of a classifier."""
     
-def heat_map(corr, plot_name=False):
-    """
-    Returns a heatmap of a correlation matrix
+    features = list(pipeline[0].transformers_[0][1].get_feature_names()) +\
+                list(X.select_dtypes('number').columns)
     
-    If a plot_name string is provided then a figure is saved to the figure directory.
-    Args:
-        corr: A corelation matrix object.
-    """
-    mask = np.triu(np.ones_like(corr, dtype=np.bool))
-
-    fig1, ax1 = plt.subplots(figsize=(11, 9))
-    sns.heatmap(corr, mask=mask, cmap='viridis');
-    path = os.path.join(gparent,'reports/figures',f'{plot_name}.png')
-    if plot_name!=False:
-        plt.savefig(path,  bbox_inches ="tight",\
-                    pad_inches = .25, transparent = False)
-    plt.show()
-    
-    
-def base_coefs(pipe, plot_name=False):
-    """If a plot_name string is provided then a figure is saved to the figure directory. """
-    
-    coefs = pipe[1].coef_.flatten()
-    features = pipe[0].get_feature_names()
-    zips = zip(features, coefs)
-    coef_df = pd.DataFrame(zips, columns=['feature', 'value'])
-    coef_df["abs_value"] = coef_df["value"].apply(lambda x: abs(x))
-    coef_df["colors"] = coef_df["value"].apply(lambda x: "darkblue" if x > 0 else "lightseagreen")
-    coef_df = coef_df.sort_values("abs_value", ascending=False)
-
-    fig, ax = plt.subplots(1, 1, figsize=(20, 8))
-    sns.barplot(x="feature",
-                y="value",
-                data=coef_df.head(30),
-               palette=coef_df.head(30)["colors"])
-    ax.set_xticklabels(ax.get_xticklabels(), rotation=80, fontsize=20)
-    ax.set_title("Dark Blue = Negative Sentiment Features", fontsize=20)
-    plt.suptitle("Top 30 Features", fontsize=30)
-    ax.set_ylabel("Coefs", fontsize=22)
-    ax.set_xlabel("Feature Name", fontsize=22)
-    path = os.path.join(gparent,'reports/figures',f'{plot_name}.png')
-    if plot_name!=False:
-        plt.savefig(path,  bbox_inches ="tight",\
-                    pad_inches = .25, transparent = False)
-    plt.show()
-    
-def feature_plot(pipe):
-    """
-    Returns feature importances of a model.
-    
-    If a plot_name string is provided then a figure is saved to the figure directory.
-    """
-    
-    features = list(pipe[0].get_feature_names())
-    features = fn.feat_cleaner(features)
-    importances = pipe[1].feature_importances_
-    sorted_importances = sorted(list(zip(features, importances)),
+    importances = pipeline[1].feature_importances_
+    sorted_importances = sorted(list(zip(features, importances)),\
                                 key=lambda x: x[1], reverse=True)[:25]
     x = [val[0] for val in sorted_importances]
     y = [val[1] for val in sorted_importances]
-    
-    plt.figure(figsize=(20,8))
-    sns.barplot(x=x, y=y, palette='Blues_r', edgecolor='deepskyblue')
-    plt.xticks(rotation=80, fontsize=20)
-    plt.title('Feature Importances', fontsize=30)
+    plt.figure(figsize=(20,6))
+    sns.barplot(x=x, y=y, palette='GnBu_r', edgecolor='lightseagreen')
+    plt.xticks(rotation=80)
     path = os.path.join(gparent,'reports/figures',f'{plot_name}.png')
     if plot_name!=False:
         plt.savefig(path,  bbox_inches ="tight",\
                     pad_inches = .25, transparent = False)
     plt.show()
-
     
+def importance_plot_bclf(pipeline, X, plot_name):
+    """Returns feature importances of a classifier."""
+    
+    features = list(pipeline[0].transformers_[0][1].get_feature_names()) +\
+                list(X.select_dtypes('number').columns)
+    
+    importances = np.mean([tree.feature_importances_\
+                           for tree in pipeline[1].estimators_], axis=0)
+    sorted_importances = sorted(list(zip(features, importances)),\
+                                key=lambda x: x[1], reverse=True)[:25]
+    x = [val[0] for val in sorted_importances]
+    y = [val[1] for val in sorted_importances]
+    plt.figure(figsize=(20,6))
+    sns.barplot(x=x, y=y, palette='GnBu_r', edgecolor='lightseagreen')
+    plt.xticks(rotation=80)
+    path = os.path.join(gparent,'reports/figures',f'{plot_name}.png')
+    if plot_name!=False:
+        plt.savefig(path,  bbox_inches ="tight",\
+                    pad_inches = .25, transparent = False)
+    plt.show()    
+    
+def importance_plot_sm(pipeline, X, plot_name):
+    """Returns feature importances of a classifier."""
+    
+    features = list(pipeline[0].transformers_[0][1].get_feature_names()) +\
+                list(X.select_dtypes('number').columns)
+    
+    importances = pipeline[2].feature_importances_
+    sorted_importances = sorted(list(zip(features, importances)),\
+                                key=lambda x: x[1], reverse=True)[:25]
+    x = [val[0] for val in sorted_importances]
+    y = [val[1] for val in sorted_importances]
+    plt.figure(figsize=(20,6))
+    sns.barplot(x=x, y=y, palette='GnBu_r', edgecolor='lightseagreen')
+    plt.xticks(rotation=80)
+    path = os.path.join(gparent,'reports/figures',f'{plot_name}.png')
+    if plot_name!=False:
+        plt.savefig(path,  bbox_inches ="tight",\
+                    pad_inches = .25, transparent = False)
+    plt.show()    

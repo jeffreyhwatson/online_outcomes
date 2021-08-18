@@ -234,21 +234,29 @@ def perm_importances(clf, X, y, scoring):
     
     Args:
         clf: A classifier.
-        X: A dataframe.
-        y: A series.
+        X: A feature dataframe.
+        y: A series of class labels.
         scoring: A string indicating the scoring object to be used.
     """
+    
+    # getting importances
     importances = permutation_importance(clf, X, y, n_repeats=10,
                                          scoring=scoring,
                                          random_state=2021, n_jobs=-1)
+    # getting sorted indicies from importances_mean
     sorted_index = importances.importances_mean.argsort()
-    data=importances.importances[sorted_index].T
+    # getting sorted data & columns
+    data = importances.importances[sorted_index].T
     columns = X.columns[sorted_index]
+    #creating dataframe
     pi_df = pd.DataFrame(data=data, columns=columns)
+    # cleaning up the column names
     cols = [col.replace('_', ' ').title() for col in pi_df.columns]
     pi_df.columns = cols
+    # plotting results
     fig, ax = plt.subplots(figsize=(20, 8))
     sns.boxplot(data=pi_df, orient='h', palette='GnBu_r')
+    plt.xlabel('Mean Difference In Baseline Metric And Permuted Metric', fontsize=20)
     plt.show()
 
 def cohens_d(sample1, sample2):
@@ -270,3 +278,8 @@ def cohens_d(sample1, sample2):
     pooled_var = ((n1-1) * var1 + (n2-1) * var2) / (n1 + n2 - 2)
     d = diff / np.sqrt(pooled_var)
     return d
+
+def get_features(keys, X):
+    feature = dict((count,val) for count,val in enumerate(X.columns))
+    for i in keys:
+        print(f'{i} {feature[i]}')
