@@ -8,7 +8,6 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
-
 from src import helper_functions as fn
 
 def outcomes_type(df, plot_name=False):
@@ -343,4 +342,5 @@ def importance_plot_sm(pipeline, X, plot_name=False):
     if plot_name!=False:
         plt.savefig(path,  bbox_inches ="tight",\
                     pad_inches = .25, transparent = False)
-    plt.show()    
+    plt.show() 
+    

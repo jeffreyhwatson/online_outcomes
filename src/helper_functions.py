@@ -9,7 +9,7 @@ import statsmodels.api as sm
 
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import (accuracy_score, f1_score, recall_score, precision_score,
-                             make_scorer, plot_confusion_matrix, confusion_matrix)
+                             make_scorer, plot_confusion_matrix, confusion_matrix, roc_auc_score)
 from sklearn.inspection import permutation_importance
 
 import matplotlib.pyplot as plt
@@ -205,16 +205,24 @@ def sv_si_fixes(df):
     return binarize_target(df)
 
 def chi_sq_test(cross_tabs):
+    """
+    Prints the Chi-Squared Statistic, p-value, and degress of freedom from a Chi-Squared test.
+    
+    Args:
+        cross_tabs: A crosstab dataframe.
+    """
     chi2, p, dof, con_table = stats.chi2_contingency(cross_tabs)
     print(f'chi-squared = {chi2}\np value= {p}\ndegrees of freedom = {dof}')
 
 def cramers_v(cross_tabs):
-    """Returns the Cramer's V values for the various categories.
+    """
+    Returns the Cramer's V values for the various categories.
     
     Args:
         cross_tabs: A crosstab dataframe.
     Returns:
-        Crarmer's V values for the various categories."""
+        Crarmer's V values for the various categories.
+    """
     
     # getting the chi sq. stat
     chi2 = stats.chi2_contingency(cross_tabs)[0]
@@ -230,7 +238,8 @@ def cramers_v(cross_tabs):
     return v
 
 def perm_importances(clf, X, y, scoring):
-    """Plots the permution importances of the features.
+    """
+    Plots the permution importances of the features.
     
     Args:
         clf: A classifier.
@@ -280,6 +289,68 @@ def cohens_d(sample1, sample2):
     return d
 
 def get_features(keys, X):
+    """
+    Prints the feature names of the data after one hot encoding.
+    
+    Args:
+       keys: A list of integers representing the desired features.
+       X: A dataframe containing the features prior to one hot encoding.
+    """
+    
     feature = dict((count,val) for count,val in enumerate(X.columns))
     for i in keys:
         print(f'{i} {feature[i]}')
+        
+def predictions(threshold, probabilities):
+    """
+    Returns class labels based on the given threshold.
+    
+    Args:
+       threshold: A float indicating the desired threshold.
+       probabilities: A series of probabilities.
+    Returns:
+        A list of class predictions.
+    """
+    
+    return [1 if probability > threshold else 0 for probability in probabilities]
+
+def roc_auc(model, X, y, plot_name=False):
+    """
+    Plots a roc curve and displays the auc value.
+    
+    Args:
+       clf: A classifier.
+       X: A feature dataframe.
+       y: A series of class labels.
+       plot_name: A string indicating the plot's name.
+    """
+    
+    # getting the class prediction probabilities
+    probabilites = model.predict_proba(X)[:, 1]
+    # calculating the AUC score
+    auc = roc_auc_score(y, probabilites)
+    # calculating the true positive, false positive, true negative, and false negative rates
+    roc_tuples = []
+    for threshold in np.linspace(0, 1, 100):
+        preds = predictions(threshold, probabilites)
+        tn, fp, fn, tp = confusion_matrix(y, preds).ravel()
+        tprate = tp/(tp+fn)
+        fprate = fp/(fp+tn)
+        roc_tuples.append([tprate, fprate])
+    # creating the plot data data frame
+    roc_df = pd.DataFrame(roc_tuples, columns=['tp_rate', 'fp_rate'])
+    # plotting the results
+    ax, fig = plt.subplots(figsize=(10,8))
+    sns.lineplot(x='fp_rate', y='tp_rate', data=roc_df, color="lightseagreen")
+    sns.lineplot(x=np.linspace(0, 1, 100),
+             y=np.linspace(0, 1, 100), style=True, 
+                 dashes=[(2,2)], color='steelblue')
+    plt.legend(labels=['ROC', 'Random Choice'], title = f'AUC={round(auc, 2)}', 
+               fontsize = 'large', title_fontsize = '20')
+    plt.xlabel('False Positive Rate')
+    plt.ylabel('True Positive Rate')
+    path = os.path.join(gparent,'reports/figures',f'{plot_name}.png')
+    if plot_name!=False:
+        plt.savefig(path,  bbox_inches ="tight",\
+                    pad_inches = .25, transparent = False)
+    plt.show()
