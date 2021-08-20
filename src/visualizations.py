@@ -287,8 +287,7 @@ def importance_plot(pipeline, X, plot_name=False):
     """Returns feature importances of a classifier."""
     
     features = list(pipeline[0].transformers_[0][1].get_feature_names()) +\
-                list(X.select_dtypes('number').columns)
-    
+                list(X.select_dtypes('number').columns)   
     importances = pipeline[1].feature_importances_
     sorted_importances = sorted(list(zip(features, importances)),\
                                 key=lambda x: x[1], reverse=True)[:25]
@@ -307,8 +306,7 @@ def importance_plot_bclf(pipeline, X, plot_name=False):
     """Returns feature importances of a classifier."""
     
     features = list(pipeline[0].transformers_[0][1].get_feature_names()) +\
-                list(X.select_dtypes('number').columns)
-    
+                list(X.select_dtypes('number').columns)   
     importances = np.mean([tree.feature_importances_\
                            for tree in pipeline[1].estimators_], axis=0)
     sorted_importances = sorted(list(zip(features, importances)),\
@@ -328,8 +326,7 @@ def importance_plot_sm(pipeline, X, plot_name=False):
     """Returns feature importances of a classifier."""
     
     features = list(pipeline[0].transformers_[0][1].get_feature_names()) +\
-                list(X.select_dtypes('number').columns)
-    
+                list(X.select_dtypes('number').columns)    
     importances = pipeline[2].feature_importances_
     sorted_importances = sorted(list(zip(features, importances)),\
                                 key=lambda x: x[1], reverse=True)[:25]
@@ -344,12 +341,30 @@ def importance_plot_sm(pipeline, X, plot_name=False):
                     pad_inches = .25, transparent = False)
     plt.show() 
     
+def error_rate(df, plot_name=False):
+    """"Plots the error rate for each of the labels."""
+    
+    label_counts = df.label.value_counts()
+    label_errors = df[df['result'] != df['prediction']]['label'].value_counts()
+    error_rates = label_errors/label_counts
+    er_df = pd.DataFrame(error_rates).reset_index()
+    fig, ax=plt.subplots(figsize=(20,8))
+    sns.barplot(x='index', y='label', data=er_df)
+    plt.title('Error Rate By Outcome', fontsize=25)
+    plt.xticks(fontsize=20)
+    plt.xlabel('')
+    plt.ylabel('Error Rate', fontsize=20)
+    path = os.path.join(gparent,'reports/figures',f'{plot_name}.png')
+    if plot_name!=False:
+        plt.savefig(path,  bbox_inches ="tight",\
+                    pad_inches = .25, transparent = False)
+    plt.show()
+    
 def numerical_errors(df, num_cols, plot_name=False):
     """"Plots the mean values of features across outcome & prediction type."""
     
     num_cols = num_cols
     num_errors = df[num_cols]
-
     fig, ax = plt.subplots(5,1, figsize = (20,40))
     ax = ax.ravel()
     for idx, col in enumerate(num_cols):
@@ -369,16 +384,28 @@ def numerical_errors(df, num_cols, plot_name=False):
         data['True Fail Predictions'] = df[(df['result'] 
                                                  == df['prediction'])
                                                 & (df['label'] == 'Fail')][col] 
-
-
         sns.barplot(data=data, ax=ax[idx], palette='GnBu_r', 
                     edgecolor='lightseagreen')
         ax[idx].set(title=f"Average {col.replace('_', ' ').title()}")
-
     fig.tight_layout(pad = 7, h_pad = 3, w_pad = 5)
-    plt.suptitle('Mean Feature Values Across Outcome And Prediction Type', fontsize=30 )
+    plt.suptitle('Mean Feature Values Across Outcome And Prediction Type',
+                 fontsize=30 )
     path = os.path.join(gparent,'reports/figures',f'{plot_name}.png')
     if plot_name!=False:
         plt.savefig(path,  bbox_inches ="tight",\
                     pad_inches = .25, transparent = False)
-    plt.show()    
+    plt.show()
+    
+def categorical_errors(df, col, rotation=False, plot_name=False):   
+    fig, ax = plt.subplots(figsize = (20,8))
+    sns.barplot(data=df, x=col, y='true_prediction', palette='GnBu_r', edgecolor='lightseagreen')
+    plt.title(f"Percent Predicted Correctly By {col.replace('_', ' ').title()}")
+    plt.xlabel('')
+    plt.ylabel('Pecent Correct', fontsize=20)
+    if rotation !=False:
+        plt.xticks(rotation=rotation)
+    path = os.path.join(gparent,'reports/figures',f'{plot_name}.png')
+    if plot_name!=False:
+        plt.savefig(path,  bbox_inches ="tight",\
+                    pad_inches = .25, transparent = False)
+    plt.show()
