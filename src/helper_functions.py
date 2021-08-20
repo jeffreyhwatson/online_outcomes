@@ -66,7 +66,7 @@ def X_y(df):
     """Returns a data frame and target series."""
     
     X = df.drop('target', axis=1)
-    y = df['target']
+    y = df[f'target']
     return X, y
 
 def test_train(X, y):
@@ -151,6 +151,13 @@ def pickle_model(model, model_name):
     file = open(path, 'wb')
     pickle.dump(model, file)
     file.close()
+    
+def load_model(model_name):
+    """Loads pickled model."""
+    
+    path = os.path.join(gparent, 'models', f'{model_name}.pkl')
+    model = pickle.load(open(path, 'rb'))
+    return model
 
 def col_pop(df, column, index=False):
     """Moves column to index given"""

@@ -344,3 +344,41 @@ def importance_plot_sm(pipeline, X, plot_name=False):
                     pad_inches = .25, transparent = False)
     plt.show() 
     
+def numerical_errors(df, num_cols, plot_name=False):
+    """"Plots the mean values of features across outcome & prediction type."""
+    
+    num_cols = num_cols
+    num_errors = df[num_cols]
+
+    fig, ax = plt.subplots(5,1, figsize = (20,40))
+    ax = ax.ravel()
+    for idx, col in enumerate(num_cols):
+        data = pd.DataFrame()
+        data['All Students'] = df[col]
+        data['Students That Passed'] = df[df['label'] == 'Pass'][col]
+        data['False Pass Predictions'] = df[(df['result']
+                                                 != df['prediction'])
+                                                & (df['label'] == 'Pass')][col]    
+        data['True Pass Predictions'] = df[(df['result'] 
+                                                == df['prediction'])
+                                               & (df['label'] == 'Pass')][col]  
+        data['Students That Failed'] = df[df['label'] == 'Fail'][col]
+        data['False Fail Predictions'] = df[(df['result'] 
+                                                 != df['prediction'])
+                                                & (df['label'] == 'Fail')][col]    
+        data['True Fail Predictions'] = df[(df['result'] 
+                                                 == df['prediction'])
+                                                & (df['label'] == 'Fail')][col] 
+
+
+        sns.barplot(data=data, ax=ax[idx], palette='GnBu_r', 
+                    edgecolor='lightseagreen')
+        ax[idx].set(title=f"Average {col.replace('_', ' ').title()}")
+
+    fig.tight_layout(pad = 7, h_pad = 3, w_pad = 5)
+    plt.suptitle('Mean Feature Values Across Outcome And Prediction Type', fontsize=30 )
+    path = os.path.join(gparent,'reports/figures',f'{plot_name}.png')
+    if plot_name!=False:
+        plt.savefig(path,  bbox_inches ="tight",\
+                    pad_inches = .25, transparent = False)
+    plt.show()    

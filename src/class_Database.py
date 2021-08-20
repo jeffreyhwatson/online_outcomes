@@ -121,7 +121,8 @@ class Database:
         f.col_pop(df, 'target')
         f.col_pop(df, 'row_id', 1)
         # converting data type
-        df['studied_credits'] = df['studied_credits'].apply(pd.to_numeric)
+        converts = ['num_of_prev_attempts', 'studied_credits']
+        df[converts] = df[converts].apply(pd.to_numeric)
         return df
     
     def registration_data_df(self, cutoff_date):
@@ -174,7 +175,7 @@ class Database:
         /* creating the row_id column by concatenation*/
         SI.code_module || SI.code_presentation || SI.id_student AS row_id,
         /* creating binarized target column*/
-        iif(SI.final_result='Pass' OR SI.final_result='Distinction', 0, 1) AS target,
+        IIF(SI.final_result='Pass' OR SI.final_result='Distinction', 0, 1) AS target,
         /* creating weighted_ave column*/
         SUM(SA.score*A.weight*.01) AS weighted_ave,
         /* creating mean_score column*/
