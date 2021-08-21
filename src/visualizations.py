@@ -10,14 +10,35 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from src import helper_functions as fn
 
+def outcomes_target(df, plot_name=False):
+    """If a plot_name string is provided then a figure is saved to the figure directory."""
+    
+    res = df.target.value_counts(normalize=True)\
+    .reset_index(name='Percentage')
+    res = res.rename(columns={'index': 'Outcome'})
+    res['Outcome'] = res['Outcome'].apply(lambda x: \
+                                          'Satisfactory' if x==1 else 'Unsatisfactory')
+    fig, ax = plt.subplots(figsize=(16,8))
+    sns.barplot(x='Outcome', y ='Percentage',
+                data=res, palette='GnBu_r', edgecolor='lightseagreen')
+    plt.title('Share of Outcomes', fontsize=25)
+    plt.ylabel('', fontsize=20)
+    plt.xlabel('Percentage of Total Outcomes', fontsize=20)
+    path = os.path.join(gparent,'reports/figures',f'{plot_name}.png')
+    if plot_name!=False:
+        plt.savefig(path,  bbox_inches ="tight",\
+                    pad_inches = .25, transparent = False)
+    plt.show()
+    return res
+
 def outcomes_type(df, plot_name=False):
     """If a plot_name string is provided then a figure is saved to the figure directory."""
     
     res = df.final_result.value_counts(normalize=True)\
-    .reset_index(name='percentage')
-
+    .reset_index(name='Percentage')
+    res = res.rename(columns={'index': 'Outcome'})
     fig, ax = plt.subplots(figsize=(16,8))
-    sns.barplot(x='percentage', y ='index',
+    sns.barplot(x='Percentage', y ='Outcome',
                 data=res, palette='GnBu_r', edgecolor='lightseagreen')
     plt.title('Share of Outcomes by Type', fontsize=25)
     plt.ylabel('', fontsize=20)
@@ -27,15 +48,16 @@ def outcomes_type(df, plot_name=False):
         plt.savefig(path,  bbox_inches ="tight",\
                     pad_inches = .25, transparent = False)
     plt.show()
+    return res
     
 def outcomes_imd(df, plot_name=False):
     """If a plot_name string is provided then a figure is saved to the figure directory."""
     
     imd = df.groupby('imd_band')['final_result']\
-    .value_counts(normalize=True).reset_index(name='percentage')
-
+    .value_counts(normalize=True).reset_index(name='Percentage')
+    imd = imd.rename(columns={'index': 'Outcome'})
     fig, ax = plt.subplots(figsize=(16,8))
-    sns.barplot(x='imd_band', y ='percentage',
+    sns.barplot(x='imd_band', y ='Percentage',
                 data=imd,  hue='final_result', palette='GnBu_r',
                 edgecolor='lightseagreen')
     plt.title('Percentage of Outcomes By IMD Band', fontsize=25)
@@ -47,16 +69,16 @@ def outcomes_imd(df, plot_name=False):
         plt.savefig(path,  bbox_inches ="tight",\
                     pad_inches = .25, transparent = False)
     plt.show()
-    
+
 def outcomes_dis(df, plot_name=False):
     """If a plot_name string is provided then a figure is saved to the figure directory."""
     
     dis = df.groupby('disability')['final_result']\
-    .value_counts(normalize=True).reset_index(name='percentage')
-
+    .value_counts(normalize=True).reset_index(name='Percentage')
+    dis = dis.rename(columns={'disability':	'Disability', 'final_result': 'Outcome'})
     fig, ax = plt.subplots(figsize=(16,8))
-    sns.barplot(x='disability', y ='percentage',
-                data=dis,  hue='final_result', palette='GnBu_r',
+    sns.barplot(x='Disability', y ='Percentage',
+                data=dis,  hue='Outcome', palette='GnBu_r',
                 edgecolor='lightseagreen')
     plt.title('Percentage of Outcomes By Disability Status', fontsize=25)
     plt.ylabel('Percentage', fontsize=20)
@@ -68,7 +90,7 @@ def outcomes_dis(df, plot_name=False):
         plt.savefig(path,  bbox_inches ="tight",\
                     pad_inches = .25, transparent = False)
     plt.show()
-    
+    return dis
 
 def outcomes_age(df, plot_name=False):
     """If a plot_name string is provided then a figure is saved to the figure directory."""
@@ -130,6 +152,66 @@ def outcomes_gen(df, plot_name=False):
                     pad_inches = .25, transparent = False)
     plt.show()
 
+def outcomes_att(df, plot_name=False):
+    """If a plot_name string is provided then a figure is saved to the figure directory."""
+    
+    att = df.groupby('num_of_prev_attempts')['final_result']\
+    .value_counts(normalize=True).reset_index(name='percentage')
+
+    fig, ax = plt.subplots(figsize=(16,8))
+    sns.barplot(x='num_of_prev_attempts', y ='percentage',
+                data=att,  hue='final_result', palette='GnBu_r',
+                edgecolor='lightseagreen')
+    plt.title('Percentage of Outcomes by Previous Attempts', fontsize=25)
+    plt.ylabel('Percentage', fontsize=20)
+    plt.xlabel('Number of Attempts', fontsize=20)
+    plt.legend(title='Outcome', bbox_to_anchor= (1, 1))
+    path = os.path.join(gparent,'reports/figures',f'{plot_name}.png')
+    if plot_name!=False:
+        plt.savefig(path,  bbox_inches ="tight",\
+                    pad_inches = .25, transparent = False)
+    plt.show()    
+
+def outcomes_mod(df, plot_name=False):
+    """If a plot_name string is provided then a figure is saved to the figure directory."""
+    
+    att = df.groupby('code_module')['final_result']\
+    .value_counts(normalize=True).reset_index(name='percentage')
+
+    fig, ax = plt.subplots(figsize=(16,8))
+    sns.barplot(x='code_module', y ='percentage',
+                data=att,  hue='final_result', palette='GnBu_r',
+                edgecolor='lightseagreen')
+    plt.title('Percentage of Outcomes by Module', fontsize=25)
+    plt.ylabel('Percentage', fontsize=20)
+    plt.xlabel('Module Code', fontsize=20)
+    plt.legend(title='Outcome', bbox_to_anchor= (1, 1))
+    path = os.path.join(gparent,'reports/figures',f'{plot_name}.png')
+    if plot_name!=False:
+        plt.savefig(path,  bbox_inches ="tight",\
+                    pad_inches = .25, transparent = False)
+    plt.show()   
+
+def outcomes_pres(df, plot_name=False):
+    """If a plot_name string is provided then a figure is saved to the figure directory."""
+    
+    att = df.groupby('code_presentation')['final_result']\
+    .value_counts(normalize=True).reset_index(name='percentage')
+
+    fig, ax = plt.subplots(figsize=(16,8))
+    sns.barplot(x='code_presentation', y ='percentage',
+                data=att,  hue='final_result', palette='GnBu_r',
+                edgecolor='lightseagreen')
+    plt.title('Percentage of Outcomes by Presentation', fontsize=25)
+    plt.ylabel('Percentage', fontsize=20)
+    plt.xlabel('Presentation Code', fontsize=20)
+    plt.legend(title='Outcome', bbox_to_anchor= (1, 1))
+    path = os.path.join(gparent,'reports/figures',f'{plot_name}.png')
+    if plot_name!=False:
+        plt.savefig(path,  bbox_inches ="tight",\
+                    pad_inches = .25, transparent = False)
+    plt.show()       
+    
 def outcomes_reg(df, plot_name=False):
     """If a plot_name string is provided then a figure is saved to the figure directory."""
     

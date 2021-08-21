@@ -220,7 +220,16 @@ def chi_sq_test(cross_tabs):
     """
     chi2, p, dof, con_table = stats.chi2_contingency(cross_tabs)
     print(f'chi-squared = {chi2}\np value= {p}\ndegrees of freedom = {dof}')
+# effect size data frame for cramer's v
+data = np.array([[1, .1, .3, .5],
+       [2, .07, .21, .35],
+       [3, .06, .17, .29],
+       [4, .05,.15,.25],
+       [5, .04, .13, .22]])
 
+sizes = pd.DataFrame(data, columns=['Degrees of Freedom', 'Small Effect', 
+                                    'Medium Effect', 'Large Effect'])    
+    
 def cramers_v(cross_tabs):
     """
     Returns the Cramer's V values for the various categories.
@@ -240,10 +249,10 @@ def cramers_v(cross_tabs):
     # returning cramer's v
     v = np.sqrt(chi2/(n*dof))
     # printing results
-    print(f'Cramer\'s V Degrees of Freedom = {dof}\n')
-    # returning cramer's v
-    return v
-
+    print(f'Cramer\'s V Degrees of Freedom = {dof}')
+    print(f'\nEffect Size Thresholds\n{sizes}\n')
+    print(f'{v}')
+    
 def perm_importances(clf, X, y, scoring):
     """
     Plots the permution importances of the features.
