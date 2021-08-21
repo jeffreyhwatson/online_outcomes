@@ -28,7 +28,7 @@ class Harness:
                                       'Precision', 'CV_Time(sec)', 'Notes'])
         self.history = self.history.append(frame)
         self.history = self.history.reset_index(drop=True)
-        self.history = self.history.sort_values('Recall')
+        self.history = self.history.sort_values('F1')
         self.print_error(name)
         return [self.scores['test_accuracy'].mean(),
                 self.scores['test_f1'].mean(),

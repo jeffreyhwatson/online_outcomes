@@ -409,7 +409,7 @@ def importance_plot_bclf(pipeline, X, plot_name=False):
     features = list(pipeline[0].transformers_[0][1].get_feature_names()) +\
                 list(X.select_dtypes('number').columns)   
     importances = np.mean([tree.feature_importances_\
-                           for tree in pipeline[1].estimators_], axis=0)
+                           for tree in pipeline[2].estimators_], axis=0)
     sorted_importances = sorted(list(zip(features, importances)),\
                                 key=lambda x: x[1], reverse=True)[:25]
     x = [val[0] for val in sorted_importances]

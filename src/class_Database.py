@@ -126,7 +126,7 @@ class Database:
         return df
 
     def student_info_full(self):
-        """Returns a dataframe of data with either no withdrawl date or a date after the cutoff parameter."""
+        """Returns a dataframe of STUDENTINFO data."""
             
         # creating student info df
         q="""
@@ -141,7 +141,7 @@ class Database:
         return self.sql_fixes(df)
 
     def student_info_vle_full(self):
-        """Returns a dataframe of studentinfo data."""
+        """Returns a dataframe of STUDENTINFO & STUDENTVLE data."""
             
         # creating studentvle df
         q = """
@@ -172,7 +172,7 @@ class Database:
         return self.sql_fixes(df)
 
     def student_info_assessment_full(self):
-        """returns a dataframe of student info & assessment data."""
+        """returns a dataframe of STUDENTINFO & STUDENTASSESSMENT data."""
         
         q = f"""
         SELECT
@@ -228,7 +228,7 @@ class Database:
         return df
     
     def median_score_full(self):
-        """Returns a dataframe of data of median assessment scores."""
+        """Returns a dataframe of median assessment scores."""
             
         # creating registration data df
         df = self.simple_df('STUDENTASSESSMENT')
@@ -404,6 +404,8 @@ class Database:
         return self.sql_fixes(df)
 
     def pipe_cleaner(self, df, col_list):
+        """Returns a cleaned dataframe."""
+        
         def drop_cols(df, col_list):
             df = df.drop(col_list, axis=1)
             return df
