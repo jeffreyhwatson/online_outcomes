@@ -365,6 +365,25 @@ def outcomes_qc(df, plot_name=False):
                     pad_inches = .25, transparent = False)    
     plt.show()    
 
+def outcomes_sumact(df, plot_name=False):
+    """If a plot_name string is provided then a figure is saved to the figure directory."""
+    
+    act = df.groupby('activity_level')['final_result']\
+    .value_counts(normalize=True).reset_index(name='Percentage')
+    act = act.rename(columns={'index': 'Outcome'})
+    fig, ax = plt.subplots(figsize=(16,8))
+    sns.barplot(x='activity_level', y ='Percentage',
+                data=act,  hue='final_result', palette='GnBu_r',
+                edgecolor='lightseagreen')
+    plt.title('Percentage of Outcomes By Activity Level', fontsize=25)
+    plt.ylabel('Percentage', fontsize=20)
+    plt.xlabel('Activity Level', fontsize=20)
+    plt.legend(title='Outcome', bbox_to_anchor= (1, 1))
+    path = os.path.join(gparent,'reports/figures',f'{plot_name}.png')
+    if plot_name!=False:
+        plt.savefig(path,  bbox_inches ="tight",\
+                    pad_inches = .25, transparent = False)    
+    
 def importance_plot(pipeline, X, plot_name=False):
     """Returns feature importances of a classifier."""
     

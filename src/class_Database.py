@@ -173,8 +173,7 @@ class Database:
 
     def student_info_assessment_full(self):
         """returns a dataframe of student info & assessment data."""
-#         /*selecting score*/
-#         SA.score,
+        
         q = f"""
         SELECT
         /*selecting all from student info*/
@@ -205,7 +204,6 @@ class Database:
         """
         df = pd.read_sql(q, self.conn)
         return self.sql_fixes(df)
-
     
     def studentvle_full(self):
         """Returns a dataframe of STUDENTVLE data."""
@@ -254,23 +252,6 @@ class Database:
         drops = ['code_module','code_presentation','id_student']
         student_vle = student_vle.drop(drops, axis=1)
         df = df.merge(student_vle, on='row_id')
-        return self.sql_fixes(df)
-
-    def data_prep_rec(self, cutoff_date):
-        """Returns a data frame created from several tables."""
-        
-        reg_data = self.registration_data_df(cutoff_date)
-        median_score = self.median_score_df(cutoff_date)
-        student_vle = self.studentvle_df(cutoff_date)
-        df = self.student_info_assessment_df(cutoff_date)
-        
-        df = df.merge(median_score, on='id_student')
-#         drops = ['code_module','code_presentation','id_student']
-        df = df.drop(drops, axis=1)
-        drops = ['code_module','code_presentation','id_student']
-        student_vle = student_vle.drop(drops, axis=1)
-        df = df.merge(student_vle, on='row_id')
-        df = df.merge(reg_data, how='right', on='row_id')
         return self.sql_fixes(df)
 
     def cleaner_studentinfo(self, df, col_list):
@@ -418,8 +399,6 @@ class Database:
         df = df.merge(median_score, on='id_student')
         drops = ['code_module','code_presentation','id_student']
         df = df.drop(drops, axis=1)
-#         drops = ['code_module','code_presentation','id_student']
-#         student_vle = student_vle.drop(drops, axis=1)
         df = df.merge(student_vle, on='row_id')
         df = df.merge(reg_data, how='right', on='row_id')
         return self.sql_fixes(df)
@@ -481,6 +460,19 @@ class Database:
             df = df[~((df.weighted_ave < (Q1 - 1.5 * IQR))\
                                   |(df.weighted_ave > (Q3 + 1.5 * IQR)))].copy()
             return df
+        def activity_level(df):
+            # binning sum_activity data and creating a activity_level column
+            df['activity_level'] = pd.qcut(df.sum_activity, q=4,\
+                                labels=['Very Light','Light', 'Medium', 'Heavy'],\
+                                duplicates='drop')
+            return df        
+        def drop_outliers_sa(df):
+            Q1 = df.sum_activity.quantile(0.25)
+            Q3 = df.sum_activity.quantile(0.75)
+            IQR = Q3 - Q1
+            df = df[~((df.sum_activity < (Q1 - 1.5 * IQR))\
+                      |(df.sum_activity > (Q3 + 1.5 * IQR)))].copy()
+            return df
         def drop_cols(df, col_list):
             # dropping columns
             df = df.drop(col_list, axis=1)
@@ -490,10 +482,11 @@ class Database:
             df = df.dropna()
             return df  
         # applying the cleaning functions
-        df = (df.pipe(replace_vals)
-              .pipe(drop_outliers_sc).pipe(drop_outliers_wa).pipe(course_load)
-              .pipe(drop_cols, col_list)).pipe(null_zap)
+        df = (df.pipe(replace_vals).pipe(drop_outliers_sc)
+              .pipe(drop_outliers_wa).pipe(drop_outliers_sa).pipe(activity_level)
+              .pipe(course_load).pipe(drop_cols,col_list).pipe(null_zap))
         return df
+    
     def cleaner_studentinfo(self, df, col_list):
         """Returns a cleaned dataframe."""
 
@@ -529,5 +522,5 @@ class Database:
         # applying the cleaning functions
         df = (df.pipe(replace_vals)
               .pipe(drop_outliers_sc).pipe(course_load)
-              .pipe(drop_cols, col_list)).pipe(null_zap)
+              .pipe(drop_cols, col_list).pipe(null_zap))
         return df 

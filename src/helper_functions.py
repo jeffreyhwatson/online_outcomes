@@ -220,13 +220,13 @@ def chi_sq_test(cross_tabs):
     """
     chi2, p, dof, con_table = stats.chi2_contingency(cross_tabs)
     print(f'chi-squared = {chi2}\np value= {p}\ndegrees of freedom = {dof}')
+
 # effect size data frame for cramer's v
 data = np.array([[1, .1, .3, .5],
        [2, .07, .21, .35],
        [3, .06, .17, .29],
        [4, .05,.15,.25],
        [5, .04, .13, .22]])
-
 sizes = pd.DataFrame(data, columns=['Degrees of Freedom', 'Small Effect', 
                                     'Medium Effect', 'Large Effect'])    
     
@@ -283,26 +283,6 @@ def perm_importances(clf, X, y, scoring):
     sns.boxplot(data=pi_df, orient='h', palette='GnBu_r')
     plt.xlabel('Mean Difference In Baseline Metric And Permuted Metric', fontsize=20)
     plt.show()
-
-def cohens_d(sample1, sample2):
-    """
-    Returns Cohen's d value.
-    
-    Args: 
-        sample1: A pandas series or numpy array.
-        sample2: A pandas series of numpy array.
-    Returns:
-        Cohen's d value.
-    """
-    
-    diff = sample1.mean() - sample2.mean()
-    n1 = len(sample1)
-    n2 = len(sample2)
-    var1 = sample1.var(ddof=1)
-    var2 = sample2.var(ddof=1)
-    pooled_var = ((n1-1) * var1 + (n2-1) * var2) / (n1 + n2 - 2)
-    d = diff / np.sqrt(pooled_var)
-    return d
 
 def get_features(keys, X):
     """
