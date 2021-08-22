@@ -82,24 +82,33 @@ Details of the full modeling process can be found here:
 
 ![graph8](./reports/figures/baseline.png)
 
-<font size="4">Baseline Scores: Accuracy=.53, F1 = .69, Recall = 1, Precision = .53</font>
+<font size="4">Baseline Scores: Accuracy = .64, F1 = 0, Recall = 0, Precision = 0</font>
 
-#### Score Interpretation
+### Score Interpretation:
+
+F1 is a mix of both precision and recall, so the interpretation of the results is more easily given in terms of recall and precision.
+
+- From the confusion matrix we see that the baseline model is classifying everything as the majority class, which was expected.
+- No outcomes were correctly classified as Unsatisfactory, so the recall score for this model is 0. 
+- No outcomes were classified as Unsatisfactory, so the precision score (the proportion of outcomes classified as Unsatisfactory that were truly Unsatisfactory) is 0 as well.
 
 ***
 ## First Simple Model:
 
-<font size="4">Average Validation Scores: Accuracy=.59, F1 = .63, Recall = .66, Precision = .60</font>
+<font size="4">Average Validation Scores: Accuracy=.64, F1 = .28, Recall = .19, Precision = .52</font>
 
 ![graph18](./reports/figures/fsm.png)
 
-<font size="4">Scores on Test Data: Accuracy=.59, F1 = .63, Recall = .65, Precision = .61</font>
+<font size="4">Scores on Test Data: Accuracy=.64, F1 = .28, Recall = .19, Precision = .53</font>
 
 ### Score Interpretation
 
+- From the confusion matrix we see that the fsm model is classifying outcomes slightly better than baseline.
+- The recall score of .19 indicates that about 19% outcomes were correctly classified as Unsatisfactory. 
+- The precision score .53 indicates that about 53% of outcomes classified as Unsatisfactory were truly Unsatisfactory.
 ***
 ## Feature Engineering & Intermediate Models
-![graph12](./reports/figures/modeling_history.png)
+
 ***
 ## Final Model:
 <font size="4"> </font>
