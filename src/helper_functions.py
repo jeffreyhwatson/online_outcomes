@@ -253,7 +253,7 @@ def cramers_v(cross_tabs):
     print(f'\nEffect Size Thresholds\n{sizes}\n')
     print(f'{v}')
     
-def perm_importances(clf, X, y, scoring):
+def perm_importances(clf, X, y, scoring, plot_name=False):
     """
     Plots the permution importances of the features.
     
@@ -263,7 +263,7 @@ def perm_importances(clf, X, y, scoring):
         y: A series of class labels.
         scoring: A string indicating the scoring object to be used.
     """
-    
+    path = os.path.join(gparent,'reports/figures',f'{plot_name}.png')
     # getting importances
     importances = permutation_importance(clf, X, y, n_repeats=10,
                                          scoring=scoring,
@@ -279,9 +279,12 @@ def perm_importances(clf, X, y, scoring):
     cols = [col.replace('_', ' ').title() for col in pi_df.columns]
     pi_df.columns = cols
     # plotting results
-    fig, ax = plt.subplots(figsize=(20, 8))
+    fig, ax = plt.subplots(figsize=(16, 8))
     sns.boxplot(data=pi_df, orient='h', palette='GnBu_r')
-    plt.xlabel('Mean Difference In Baseline Metric And Permuted Metric', fontsize=20)
+    plt.xlabel('Mean Difference In Baseline Score And Permuted Score', fontsize=20)
+    if plot_name != False:
+        plt.savefig(path,  bbox_inches ="tight",\
+            pad_inches = .25, transparent = False)
     plt.show()
 
 def get_features(keys, X):

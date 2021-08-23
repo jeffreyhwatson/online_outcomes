@@ -30,12 +30,10 @@ class Harness:
         self.history = self.history.reset_index(drop=True)
         self.history = self.history.sort_values('F1')
         self.print_error(name)
-        return [self.scores['test_accuracy'].mean(),
-                self.scores['test_f1'].mean(),
-                self.scores['test_recall'].mean(),
-                self.scores['test_precision'].mean()]
+        
     def print_error(self, name):
         print(f"{name} has an average Accuracy of {self.scores['test_accuracy'].mean()}")
         print(f"{name} has an average F1 of {self.scores['test_f1'].mean()}")
         print(f"{name} has an average Recall of {self.scores['test_recall'].mean()}")
         print(f"{name} has an average Precision of {self.scores['test_precision'].mean()}")
+        

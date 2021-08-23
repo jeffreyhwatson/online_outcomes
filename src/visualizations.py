@@ -17,8 +17,8 @@ def outcomes_target(df, plot_name=False):
     .reset_index(name='Percentage')
     res = res.rename(columns={'index': 'Outcome'})
     res['Outcome'] = res['Outcome'].apply(lambda x: \
-                                          'Satisfactory' if x==1 else 'Unsatisfactory')
-    fig, ax = plt.subplots(figsize=(16,8))
+                                          'Satisfactory' if x==0 else 'Unsatisfactory')
+    fig, ax = plt.subplots(figsize=(20,8))
     sns.barplot(x='Outcome', y ='Percentage',
                 data=res, palette='GnBu_r', edgecolor='lightseagreen')
     plt.title('Share of Outcomes', fontsize=25)
@@ -37,7 +37,7 @@ def outcomes_type(df, plot_name=False):
     res = df.final_result.value_counts(normalize=True)\
     .reset_index(name='Percentage')
     res = res.rename(columns={'index': 'Outcome'})
-    fig, ax = plt.subplots(figsize=(16,8))
+    fig, ax = plt.subplots(figsize=(20,8))
     sns.barplot(x='Percentage', y ='Outcome',
                 data=res, palette='GnBu_r', edgecolor='lightseagreen')
     plt.title('Share of Outcomes by Type', fontsize=25)
@@ -118,7 +118,7 @@ def outcomes_edu(df, plot_name=False):
     edu = df.groupby('highest_education')['final_result']\
     .value_counts(normalize=True).reset_index(name='percentage')
 
-    fig, ax = plt.subplots(figsize=(16,8))
+    fig, ax = plt.subplots(figsize=(20,8))
     sns.barplot(x='highest_education', y ='percentage',
                 data=edu,  hue='final_result', palette='GnBu_r',
                 edgecolor='lightseagreen')
@@ -259,7 +259,7 @@ def outcome_clks(df, plot_name=False):
     clix = df.groupby('final_result')['click_sum']\
     .mean().reset_index(name='mean_clicks')
     
-    fig, ax=plt.subplots(figsize=(20,8))
+    fig, ax=plt.subplots(figsize=(16,8))
     sns.barplot(x='mean_clicks', y='final_result', data=clix, palette='GnBu_r',
                 edgecolor='lightseagreen')
     plt.title('Mean Clicks Per Outcome', fontsize=25)
@@ -278,7 +278,7 @@ def outcome_nact(df, plot_name=False):
     clix = df.groupby('final_result')['num_activities']\
     .mean().reset_index(name='mean_activities')
     
-    fig, ax=plt.subplots(figsize=(20,8))
+    fig, ax=plt.subplots(figsize=(16,8))
     sns.barplot(x='mean_activities', y='final_result', data=clix, palette='GnBu_r',
                 edgecolor='lightseagreen')
     plt.title('Mean Activities Per Outcome', fontsize=25)
@@ -449,7 +449,7 @@ def error_rate(df, plot_name=False):
     label_errors = df[df['result'] != df['prediction']]['label'].value_counts()
     error_rates = label_errors/label_counts
     er_df = pd.DataFrame(error_rates).reset_index()
-    fig, ax=plt.subplots(figsize=(20,8))
+    fig, ax=plt.subplots(figsize=(16,8))
     sns.barplot(x='index', y='label', data=er_df)
     plt.title('Error Rate By Outcome', fontsize=25)
     plt.xticks(fontsize=20)
@@ -498,7 +498,7 @@ def numerical_errors(df, num_cols, plot_name=False):
     plt.show()
     
 def categorical_errors(df, col, rotation=False, plot_name=False):   
-    fig, ax = plt.subplots(figsize = (20,8))
+    fig, ax = plt.subplots(figsize = (16,8))
     sns.barplot(data=df, x=col, y='true_prediction', palette='GnBu_r', edgecolor='lightseagreen')
     plt.title(f"Percent Predicted Correctly By {col.replace('_', ' ').title()}")
     plt.xlabel('')
