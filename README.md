@@ -162,7 +162,7 @@ Encourage students to maintain a medium or higher activity, and initiate an auto
 # Modeling
 
 Details of the full modeling process can be found here:
-[Modeling Notebook](./notebooks/exploratory/modeling_eda.ipynb)
+[Modeling Notebook](./notebooks/exploratory/half_term_modeling.ipynb)
 
 
 ## Baseline Model: Dummy Classifier
@@ -256,8 +256,7 @@ For any additional questions, please contact **Jeffrey Hanif Watson jeffrey.h.wa
 
 5. NASPA Foundation & Course Hero. "Student Wellness During Covid-19." October 2020, https://marketplace.collegepulse.com/img/student_wellness_collegepulse_final.pdf.
 
-6. 
-Donnelly, Robin &  Patrinos, Harry A. "Is the COVID-19 slide in education real?." *blogs.worldbank.org*, 8 December 2020, https://blogs.worldbank.org/education/covid-19-slide-education-real
+6. Donnelly, Robin &  Patrinos, Harry A. "Is the COVID-19 slide in education real?." *blogs.worldbank.org*, 8 December 2020, https://blogs.worldbank.org/education/covid-19-slide-education-real
 
 7. Johnson Hess, Abigail. "7 ways the coronavirus pandemic could change college this fall and forever." *www.cnbc.com* June 19 2020,
 www.cnbc.com/2020/06/19/7-ways-coronavirus-pandemic-may-change-college-this-fall-and-forever.html
