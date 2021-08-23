@@ -36,13 +36,27 @@
 `cd` into the project folder and run `conda env create --file
 oo.yml` in your terminal. Next, run `conda activate oo`.
 ***
-## Overview:
+## Overview
+The Covid-19 pandemic has only accelerated the growth in online learning and the opportunities and concerns associated with it. This project aimed to develop a model to predict unfavorable outcomes in virtual learning environments and recommendations for strategies to avoid and/or remedy those outcomes.
 
+Because we wanted to avoid both false positives and false negatives for this project, an accuracy measure of F1 was chosen since it is sensitive to both types of error. Data cleaning, EDA, modeling, and evaluation were performed, and a voting classifier model with an F1 accuracy score of 0.67 (recall=.66, precision=.68) was chosen as the the final model for the project. An F1 score is a mix of both precision and recall (F1=1 means perfect recall and precision), so interpretation of the results is more easily described in terms of recall and precision. 
+
+- The recall score of .66 meant that 66% of unsatisfactory outcomes were correctly classified as unsatisfactory.
+
+- The precision score of .68 indicated that 68% of outcomes classified as unsatisfactory were truly unsatisfactory. 
+
+Statistical testing was also employed to develop the following recommendations to help drive a higher level of satisfactory outcomes:
+
+- Preemptive outreach and support programs for non-traditional learners and lower income students, and inferential research into the advantages and disadvantages that socioeconomic status and education level confer in an academic setting to help refine those programs moving forward.
+
+- Encourage students to maintain a modest course load. Over half of the students with a heavy course load withdraw before the and of the course and even a medium course load make a withdrawl about as likely as a passing grade.
+
+- Encourage students to maintain a medium or higher online activity level and initiate an automated reminder system that triggers when a student fall below a predetermined level. Also, initiate an web design assessment and A/B testing program with the goal of identifying ways of driving up student engagement.
 ***
 ## Business Understanding
 In the years before the pandemic, online learning had been enjoying slow, reliable growth <sup>1</sup>, and was predicted to become a \$350 Billion global market by 2025.<sup>2</sup> Covid-19 has only accelerated this trend, with examples such as the online learning platform edX experiencing a 15-fold growth in registrations in April 2020<sup>3</sup>, and almost 93\% of school-age children engaged in online learning in 2020.<sup>4</sup> 
 
-While the growth in online learning has provides opportunites, it has also raises concerns about student engagement, learning loss, and inequality. According to a recent NASPA Foundation survey, the main concern of over 70\% of college students is staying engaged with their course materials online<sup>5</sup>. The World Bank also reports that school closures and online learning have led to widespread learning loss across Europe and Central Asia<sup>6</sup>, and Harvard Professor Todd Rose notes that "Poor students and first-generation students often don’t do as well online."<sup>7</sup>
+While the growth in online learning has provides opportunites, it has also raises concerns about student engagement, learning loss, and inequality. According to a recent NASPA Foundation survey, the main concern of over 70\% of college students is staying engaged with their online course materials<sup>5</sup>. The World Bank also reports that school closures and online learning have led to widespread learning loss across Europe and Central Asia<sup>6</sup>, and Harvard Professor Todd Rose notes that "Poor students and first-generation students often don’t do as well online."<sup>7</sup>
 
 This project aims to develop recommendations for strategies to avoid unstatisfactory outcomes in online learning environments and implement a model that can predict unfavorable outcomes in a timely manner so interventions can be applied to improve those outcomes.
 
@@ -75,7 +89,7 @@ After the data frame was created various cosmetic fixes were applied to the data
 
 In order to be able to predict unsatisfactory outcomes while there is still time to intervene, we limited the model to data logged upto the halfway of the courses. Since the median course length is 240 days, a cutoff point of 120 days was chosen. Further, students who withdrew before the 120th day were dropped from the data, since their outcome was fully determined within the 120 day window.
 
-Data cleaning details for the project can be found here:
+Data preparation, EDA, and feature engineering experiments for the project can be found here:
 [Data Cleaning/EDA Notebook](./notebooks/exploratory/cleaning_eda.ipynb)
 
 ***
@@ -113,7 +127,7 @@ IMD Band is a measure of socioeconomic status that is based on geographic locati
 
 Statistical testing was performed and it was found that IMD band and outcome are not independent. in general, Distinction and Pass vary directly with IMD band. The higher the student's IMD band, the more likely the student is to pass or pass with distinction. Conversely, Withdrawn and Fail vary inversely with IMD band. In general, the lower the student's IMD band the more likely the student is to fail or withdraw. 
 
-IMD band has a small, but statistically significant effect on the outcomes Pass and Withdrawn, and a medium sized effect on Fail and Distinction.
+**IMD band has a small, but statistically significant effect on the outcomes Pass and Withdrawn, and a medium sized effect on Fail and Distinction.**
 
 ## Outcome by Education Level
 The rank of these UK education categories is as follows(from lowest to highest): No Formal Qualifications, Lower Than A Level, A Level, HE Qualification, Post Graduate Qualification.
@@ -121,7 +135,7 @@ The rank of these UK education categories is as follows(from lowest to highest):
 
 Statistical testing was performed and it was found that education level and outcome are not independent. In general, Distinction and Pass vary directly with education level. The higher the student's education level, the more likely the student is to pass or pass with distinction. Conversely, Withdrawn and Fail vary inversely with education. In general, the lower the student's education level the more likely the student is to fail or withdraw. 
 
-Education level has a medium effect on Pass, Fail, and Withdrawn, and a large effect on Distinction.
+**Education level has a medium sized effect on Pass, Fail, and Withdrawn, and a large sized effect size on Distinction.**
 
 ## Recommendation
 
@@ -137,7 +151,7 @@ Course load is a feature that categorizes the amount of credits the student was 
 
 Statistical testing was performed and it was found that course load and outcome are not independent. A light course load contributes positively to Distinction, Pass, and (counterintuitively) Fail, while it contributes negatively to Withdrawn. Conversely,  Medium and Heavy course loads contribute negatively to Distinction, Pass and (again, counterintuitively) Fail,  while they contribute positively to Withdrawn.
 
-Course load has a small effect on Pass, a medium sized effect on Withdraw and Fail, and a large effect on Distinction.
+**Course load has a small effect on Pass, a medium sized effect on Withdraw and Fail, and a large effect on Distinction.**
 
 ## Recommendation
 Encourage students to maintain a modest course load. We can see from the graph above that nearly half of the students with a heavy course load withdraw before the end of the course, and even at a medium load level there are more withdraws than passes. This data can be used to help set realistic expectations with students during matriculation and guide them to course loads that are more conducive to academic success.
@@ -153,7 +167,7 @@ The `activity_level` feature is a measure of the student's engagment with a cour
 ![graph6](./reports/figures/outcomes_sumact.png)
 Light activity levels contribute negatively to Distinction and Pass, and contribute positively to Withdrawn and Fail. Conversely,  Medium and Heavy activity levels contribute positively to Distinction and Pass, and contribute negatively to Withdrawn and Fail.
 
-`activity_level` has a large effect size on all of the outcomes, and has the largest effect sizes of all the features tested.
+**`activity_level` has a large effect size on all of the outcomes, and has the largest effect sizes of all the features tested.**
 
 ## Recommendation
 Encourage students to maintain a medium or higher activity, and initiate an automated reminder system that triggers when students fall below a predetermined activity level. Also, implement an web design assessment and A/B testing program with the goal of identifying ways of driving up student engagement. As noted in the study above, the main worry of over 70\% of college students is remaining egaged with their material online, and according to these activity level findings, they are right to be concerned.
@@ -234,9 +248,38 @@ Upon validation with the test data we see that the model is still having some tr
 ![graph10](./reports/figures/perm_importances.png)
 The assessment score features (median_score, mean_score & weighted_ave) are the main drivers of the model, with mean_score being the greatest. Interestingly, some of the most statistically significant features (imd_band, highest_education, and course_load) have little to no effect on the model.
 
+#### Unsatisfactory Class Error Analysis
+![graph10](./reports/figures/class_errors.png)
+Checking the error rates for each of the multiclass outcomes shows why the model is having trouble with the Unsatisfactory class; Withdrawn and Fail both have an error rate above 30\%.
+
+##### Modeling Data Class Distribution
+
+| Outcome     | Percentage  |
+| ----------- | ----------- |
+| Pass        | 0.533297    |
+| Withdrawn   | 0.267196    |
+| Fail        | 0.107153    |
+| Distinction | 0.092354    |
+
+Calculating the class distribution in the modeling data, we find an almost 3:2 class imbalance between the Satisfactory and Unsatisfactory classes. A multiclass classifier with oversampling might improve model performance on this data.
+
 ## Conclusion
+In the end, a moderately successful model was developed that can correctly predict outcomes halfway through the course about 66\% of the time. This time frame allows enough time to intervene and steer the student toward a satisfactory outcome. In addition, the following recommendations for prevention/intevention strategies were developed through statistical testing:
+
+- Preemptive outreach and support programs for non-traditional learners and lower income students.
+
+- Encourage students to maintain a modest course load. 
+
+- Encourage students to maintain a medium or higher online activity level and initiate an automated reminder system that triggers when a student fall below a predetermined level.
 
 ## Next Steps
+Next steps for the project include:
+
+- Develop a multiclass model with oversampling to better address to class imbalances and improve performance.
+
+- Rescale the data by individual modules to help reduce variance.
+
+- Explore the particular types of online activities that drive outcomes. 
 
 ## For More Information
 

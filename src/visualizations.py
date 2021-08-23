@@ -112,19 +112,29 @@ def outcomes_age(df, plot_name=False):
                     pad_inches = .25, transparent = False)
     plt.show()
 
+    
 def outcomes_edu(df, plot_name=False):
     """If a plot_name string is provided then a figure is saved to the figure directory."""
     
     edu = df.groupby('highest_education')['final_result']\
     .value_counts(normalize=True).reset_index(name='percentage')
+    order =  {'No Formal quals': 0, 'Lower Than A Level': 1, 'A Level or Equivalent': 2,
+          'HE Qualification':3, 'Post Graduate Qualification': 4}
+    edu['order'] = edu['highest_education'].map(order)
+    edu.sort_values(by='order')
 
     fig, ax = plt.subplots(figsize=(20,8))
-    sns.barplot(x='highest_education', y ='percentage',
+    sns.barplot(x='order', y ='percentage',
                 data=edu,  hue='final_result', palette='GnBu_r',
                 edgecolor='lightseagreen')
     plt.title('Percentage of Outcomes By Education Level', fontsize=25)
     plt.ylabel('Percentage', fontsize=20)
     plt.xlabel('')
+    order = ['No Formal Qualifications', 'Lower Than A Level',
+             'A Level or Equivalent', 'HE Qualification', 
+             'Post Graduate Qualification']
+    ax.axes.set_xticks(range(len(order)))
+    ax.axes.set_xticklabels(order)
     plt.legend(title='Outcome', bbox_to_anchor= (1, 1))
     path = os.path.join(gparent,'reports/figures',f'{plot_name}.png')
     if plot_name!=False:
@@ -371,19 +381,19 @@ def outcomes_sumact(df, plot_name=False):
     act = df.groupby('activity_level')['final_result']\
     .value_counts(normalize=True).reset_index(name='Percentage')
     act = act.rename(columns={'index': 'Outcome'})
-    fig, ax = plt.subplots(figsize=(16,8))
-    sns.barplot(x='activity_level', y ='Percentage',
-                data=act,  hue='final_result', palette='GnBu_r',
+    fig, ax = plt.subplots(figsize=(20,8))
+    sns.barplot(x='final_result', y ='Percentage',
+                data=act,  hue='activity_level', palette='GnBu_r',
                 edgecolor='lightseagreen')
-    plt.title('Percentage of Outcomes By Activity Level', fontsize=25)
+    plt.title('Percentage of Activity Level Category By Outcome', fontsize=25)
     plt.ylabel('Percentage', fontsize=20)
-    plt.xlabel('Activity Level', fontsize=20)
-    plt.legend(title='Outcome', bbox_to_anchor= (1, 1))
+    plt.xlabel('Outcome', fontsize=20)
+    plt.legend(title='Activity Level', bbox_to_anchor= (1, 1))
     path = os.path.join(gparent,'reports/figures',f'{plot_name}.png')
     if plot_name!=False:
         plt.savefig(path,  bbox_inches ="tight",\
-                    pad_inches = .25, transparent = False)    
-    
+                    pad_inches = .25, transparent = False)          
+        
 def importance_plot(pipeline, X, plot_name=False):
     """Returns feature importances of a classifier."""
     
@@ -449,7 +459,7 @@ def error_rate(df, plot_name=False):
     label_errors = df[df['result'] != df['prediction']]['label'].value_counts()
     error_rates = label_errors/label_counts
     er_df = pd.DataFrame(error_rates).reset_index()
-    fig, ax=plt.subplots(figsize=(16,8))
+    fig, ax=plt.subplots(figsize=(20,8))
     sns.barplot(x='index', y='label', data=er_df)
     plt.title('Error Rate By Outcome', fontsize=25)
     plt.xticks(fontsize=20)
