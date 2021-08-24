@@ -37,7 +37,7 @@
 oo.yml` in your terminal. Next, run `conda activate oo`.
 ***
 ## Overview
-The Covid-19 pandemic has only accelerated the growth in online learning and the opportunities and concerns associated with it. This project aimed to develop a model to predict unfavorable outcomes in virtual learning environments and recommendations for strategies to avoid and/or remedy those outcomes.
+The Covid-19 pandemic has only accelerated the growth in online learning and the opportunities and concerns associated with it. This project aimed to develop a model to predict unfavorable outcomes in virtual learning environments as well as recommendations for strategies to avoid and/or remedy those outcomes.
 
 Because we wanted to avoid both false positives and false negatives for this project, an accuracy measure of F1 was chosen since it is sensitive to both types of error. Data cleaning, EDA, modeling, and evaluation were performed, and a voting classifier model with an F1 accuracy score of 0.67 (recall=.66, precision=.68) was chosen as the the final model for the project. An F1 score is a mix of both precision and recall (F1=1 means perfect recall and precision), so interpretation of the results is more easily described in terms of recall and precision. 
 
@@ -248,6 +248,7 @@ Upon validation with the test data we see that the model is still having some tr
 ![graph10](./reports/figures/perm_importances.png)
 The assessment score features (median_score, mean_score & weighted_ave) are the main drivers of the model, with mean_score being the greatest. Interestingly, some of the most statistically significant features (imd_band, highest_education, and course_load) have little to no effect on the model.
 
+***
 #### Unsatisfactory Class Error Analysis
 ![graph10](./reports/figures/class_errors.png)
 Checking the error rates for each of the multiclass outcomes shows why the model is having trouble with the Unsatisfactory class; Withdrawn and Fail both have an error rate above 30\%.
@@ -263,6 +264,7 @@ Checking the error rates for each of the multiclass outcomes shows why the model
 
 Calculating the class distribution in the modeling data, we find an almost 3:2 class imbalance between the Satisfactory and Unsatisfactory classes. A multiclass classifier with oversampling might improve model performance on this data.
 
+***
 ## Conclusion
 In the end, a moderately successful model was developed that can correctly predict outcomes halfway through the course about 66\% of the time. This time frame allows enough time to intervene and steer the student toward a satisfactory outcome. In addition, the following recommendations for prevention/intevention strategies were developed through statistical testing:
 
@@ -272,6 +274,7 @@ In the end, a moderately successful model was developed that can correctly predi
 
 - Encourage students to maintain a medium or higher online activity level and initiate an automated reminder system that triggers when a student fall below a predetermined level.
 
+***
 ## Next Steps
 Next steps for the project include:
 
@@ -281,12 +284,14 @@ Next steps for the project include:
 
 - Explore the particular types of online activities that drive outcomes. 
 
+***
 ## For More Information
 
 Please review our full analysis in our [Jupyter Notebook](./notebooks/report/report.ipynb) or our [presentation](./reports/presentation.pdf).
 
 For any additional questions, please contact **Jeffrey Hanif Watson jeffrey.h.watson@protonmail.com**
 
+***
 ## Sources
 
 1. "The Evolution of Distance Education in 2020." *KU Online Degrees Blog*, 17 September 2020, https://educationonline.ku.edu/community/distance-education-evolution-in-2020.
