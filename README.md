@@ -135,7 +135,7 @@ The rank of these UK education categories is as follows(from lowest to highest):
 
 Statistical testing was performed and it was found that education level and outcome are not independent. In general, Distinction and Pass vary directly with education level. The higher the student's education level, the more likely the student is to pass or pass with distinction. Conversely, Withdrawn and Fail vary inversely with education. In general, the lower the student's education level the more likely the student is to fail or withdraw. 
 
-**Education level has a medium sized effect on Pass, Fail, and Withdrawn, and a large sized effect size on Distinction.**
+**Adjusted for degrees of freedom, the Cramer's V results indicate that `highest_education ` has a small effect on Pass, a medium effect on Fail and Withdrawn, and a large effect on Distinction.**
 
 ## Recommendation
 
