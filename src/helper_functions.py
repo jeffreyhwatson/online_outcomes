@@ -221,32 +221,31 @@ def chi_sq_test(cross_tabs):
     chi2, p, dof, con_table = stats.chi2_contingency(cross_tabs)
     print(f'chi-squared = {chi2}\np value= {p}\ndegrees of freedom = {dof}')
 
-# effect size data frame for cramer's v
-data = np.array([[1, .1, .3, .5],
+    
+def cramers_v(cross_tabs):
+    """
+    Prints the degrees of freedom, effect size thresholds, and Crarmer's V values.
+    
+    Args:
+        cross_tabs: A crosstab dataframe.
+    """
+    
+    # effect size data frame for cramer's v function
+    data = np.array([[1, .1, .3, .5],
        [2, .07, .21, .35],
        [3, .06, .17, .29],
        [4, .05,.15,.25],
        [5, .04, .13, .22]])
-sizes = pd.DataFrame(data, columns=['Degrees of Freedom', 'Small Effect', 
-                                    'Medium Effect', 'Large Effect'])    
-    
-def cramers_v(cross_tabs):
-    """
-    Returns the Cramer's V values for the various categories.
-    
-    Args:
-        cross_tabs: A crosstab dataframe.
-    Returns:
-        Crarmer's V values for the various categories.
-    """
+    sizes = pd.DataFrame(data, columns=['Degrees of Freedom', 'Small Effect', 
+                                        'Medium Effect', 'Large Effect']) 
     
     # getting the chi sq. stat
     chi2 = stats.chi2_contingency(cross_tabs)[0]
-    # summing each category
+    # calculating the total number of observations
     n = cross_tabs.sum()
     # getting the degrees of freedom
     dof = min(cross_tabs.shape)-1
-    # returning cramer's v
+    # calculating cramer's v
     v = np.sqrt(chi2/(n*dof))
     # printing results
     print(f'Cramer\'s V Degrees of Freedom = {dof}')
