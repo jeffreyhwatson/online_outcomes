@@ -37,9 +37,9 @@
 oo.yml` in your terminal. Next, run `conda activate oo`.
 ***
 ## Overview
-The Covid-19 pandemic has only accelerated the growth in online learning and the opportunities and concerns associated with it. This project aimed to develop a model to predict unfavorable outcomes in virtual learning environments as well as recommendations for strategies to avoid and/or remedy those outcomes.
+The Covid-19 pandemic has only accelerated the growth in online learning and the opportunities and concerns associated with it. This project aimed to develop a model to predict unfavorable outcomes in virtual learning environments and recommendations for strategies to avoid and/or remedy those outcomes.
 
-Because we wanted to avoid both false positives and false negatives for this project, an accuracy measure of F1 was chosen since it is sensitive to both types of error. Data cleaning, EDA, modeling, and evaluation were performed, and a voting classifier model with an F1 accuracy score of 0.67 (recall=.66, precision=.68) was chosen as the the final model for the project. An F1 score is a mix of both precision and recall (F1=1 means perfect recall and precision), so interpretation of the results is more easily described in terms of recall and precision. 
+Because I wanted to avoid both false positives and false negatives (to capture the maximum number of at-risk students while still efficiently allocating resources) for this project, an accuracy measure of F1 was chosen since it is sensitive to both types of error. Data cleaning, EDA, modeling, and evaluation were performed, and a voting classifier model with an F1 accuracy score of 0.67 (recall=.66, precision=.68) was chosen as the the final model for the project. An F1 score is a mix of both precision and recall (F1=1 means perfect recall and precision), so interpretation of the results is more easily described in terms of recall and precision. 
 
 - The recall score of .66 meant that 66% of unsatisfactory outcomes were correctly classified as unsatisfactory.
 
@@ -47,18 +47,20 @@ Because we wanted to avoid both false positives and false negatives for this pro
 
 Statistical testing was also employed to develop the following recommendations to help drive a higher level of satisfactory outcomes:
 
-- Preemptive outreach and support programs for non-traditional learners and lower income students, and inferential research into the advantages and disadvantages that socioeconomic status and education level confer in an academic setting to help refine those programs moving forward.
+- Preemptive outreach and support programs should be implemented for non-traditional learners and lower income students, and inferential research should be conducted examining the advantages and disadvantages that socioeconomic status and education level confer in an academic setting to help refine those programs moving forward.
 
-- Encourage students to maintain a modest course load. Over half of the students with a heavy course load withdraw before the and of the course and even a medium course load make a withdrawl about as likely as a passing grade.
+- Students should be advised to maintain modest course loads. Over half of the students with a heavy course load withdraw before the end of the course, and even a medium course load makes a withdrawl about as likely as a passing grade.
 
-- Encourage students to maintain a medium or higher online activity level and initiate an automated reminder system that triggers when a student fall below a predetermined level. Also, initiate an web design assessment and A/B testing program with the goal of identifying ways of driving up student engagement.
+- Counsel students to maintain medium or higher online activity levels, and initiate an automated reminder system that triggers when a student fall below a predetermined level. Also, initiate an web design assessment and A/B testing program with the goal of identifying ways of driving up student engagement.
+
 ***
 ## Business Understanding
 In the years before the pandemic, online learning had been enjoying slow, reliable growth <sup>1</sup>, and was predicted to become a \$350 Billion global market by 2025.<sup>2</sup> Covid-19 has only accelerated this trend, with examples such as the online learning platform edX experiencing a 15-fold growth in registrations in April 2020<sup>3</sup>, and almost 93\% of school-age children engaged in online learning in 2020.<sup>4</sup> 
 
 While the growth in online learning has provides opportunites, it has also raises concerns about student engagement, learning loss, and inequality. According to a recent NASPA Foundation survey, the main concern of over 70\% of college students is staying engaged with their online course materials<sup>5</sup>. The World Bank also reports that school closures and online learning have led to widespread learning loss across Europe and Central Asia<sup>6</sup>, and Harvard Professor Todd Rose notes that "Poor students and first-generation students often don’t do as well online."<sup>7</sup>
 
-This project aims to develop recommendations for strategies to avoid unstatisfactory outcomes in online learning environments and implement a model that can predict unfavorable outcomes in a timely manner so interventions can be applied to improve those outcomes.
+This project aims to develop recommendations for strategies to avoid unsatisfactory outcomes in online learning environments and implement a model that can predict unfavorable outcomes in a timely manner so interventions can be applied to improve those outcomes.
+
 
 ***
 ## Data Understanding
@@ -79,15 +81,15 @@ ERD & Data Details:
 ***
 ## Data Preparation: SQL & Object Oriented Methods
 
-The SQL, data preparation, and EDA experiments in the [Data Cleaning/EDA Notebook](./notebooks/exploratory/cleaning_eda.ipynb) were ultimately collected into data frame creation, data cleaning, and feature engineering OOP methods for a Database class. This was done so the methods could be implemented on the fly to create various data configurations in the modeling, error analysis, and recommendations notebooks. This code located in the [class_Database.py](./src/class_Database.py) file. 
+SQL, data preparation and EDA experiments undertaken in the [Data Cleaning/EDA Notebook](./notebooks/exploratory/cleaning_eda.ipynb) were ultimately coded into data frame creation, data cleaning, and feature engineering OOP methods for a Database class. This was done so the methods could be implemented on the fly to create various data configurations in the modeling, error analysis, and recommendations notebooks. The code located in the [class_Database.py](./src/class_Database.py) file. 
 
 ## Data Prepartion: Overview
 
-The data was collected into an SQL database, and a data frame was constructed from the various database tables. During the creation process, the multiclass `final_result` feature was binarized into a `target` feature with classes Satisfactory (Pass, Distinction), and Unsatisfactory (Withdrawn, Fail). A `row_id` feature was constructed to identify unique student-course-month combinations, and a `sum_activity` feature was added to quantify the level of a student's interaction with the course material. Lastly, `weighted_ave`, `mean_score`, and `median_score` were derived from the each row's  assessment data.
+The data was inserted into an SQL database, and a data frame was constructed from the various database tables. During the creation process, the multiclass `final_result` feature was binarized into a `target` feature with classes Satisfactory (Pass, Distinction), and Unsatisfactory (Withdrawn, Fail). A `row_id` feature was constructed to identify unique student-course-month combinations, and a `sum_activity` feature was added to quantify the level of a student's interaction with the course material. Lastly, `weighted_ave`, `mean_score`, and `median_score` were derived from the each row's  assessment data.
 
 After the data frame was created various cosmetic fixes were applied to the data, and outliers were dropped from the `studied_credits`, `weighted_ave`, and `sum_activity` features using IQR fences. A categorical `course_load` feature was derived by binning `studied_credits`, and a categorical `activity_level` feature was created by binning `sum_activity`. The `course_load` feature was used during the modeling process, and `activity_level` was used for statistical testing when while investigating business recommendations. Lastly, null values and extraneous columns were dropped in preparation of the modeling process.
 
-In order to be able to predict unsatisfactory outcomes while there is still time to intervene, we limited the model to data logged upto the halfway of the courses. Since the median course length is 240 days, a cutoff point of 120 days was chosen. Further, students who withdrew before the 120th day were dropped from the data, since their outcome was fully determined within the 120 day window.
+In order to be able to predict unsatisfactory outcomes while there is still time to intervene, we limited the model to data logged up to the halfway of the courses. Since the median course length is 240 days, a cutoff point of 120 days was chosen. Further, students who withdrew before the 120th day were dropped from the data, since their outcome was fully determined within the 120 day window.
 
 Data preparation, EDA, and feature engineering experiments for the project can be found here:
 [Data Cleaning/EDA Notebook](./notebooks/exploratory/cleaning_eda.ipynb)
@@ -125,7 +127,7 @@ The final results were binarized into Satisfactory (Pass, Distinction) and Unsat
 IMD Band is a measure of socioeconomic status that is based on geographic location. The higher the band, the better off the student is. 
 ![graph3](./reports/figures/outcomes_imd.png)
 
-Statistical testing was performed and it was found that IMD band and outcome are not independent. in general, Distinction and Pass vary directly with IMD band. The higher the student's IMD band, the more likely the student is to pass or pass with distinction. Conversely, Withdrawn and Fail vary inversely with IMD band. In general, the lower the student's IMD band the more likely the student is to fail or withdraw. 
+A Chi_Squared test was performed and it was found that IMD band and outcome are not independent(p value=2.473461324525511e-120). In general, Distinction and Pass vary directly with IMD band. The higher the student's IMD band, the more likely the student is to pass or pass with distinction. Conversely, Withdrawn and Fail vary inversely with IMD band. In general, the lower the student's IMD band the more likely the student is to fail or withdraw. 
 
 **IMD band has a small, but statistically significant effect on the outcomes Pass and Withdrawn, and a medium sized effect on Fail and Distinction.**
 
@@ -139,7 +141,7 @@ Statistical testing was performed and it was found that education level and outc
 
 ## Recommendation
 
-Preemptive outreach and support programs for non-traditional learners and lower income students, and inferential research into the advantages and disadvantages that socioeconomic status and education level confer in an academic setting to help refine those programs moving forward. Does a higher level of education and/or status correlate with higher initial skill levels, more access to outside academic support,  or greater familiarity with the requirements needed to earn more satisfactory outcomes? These are examples of questions that, if answered, could help build successful outreach and support programs.
+Preemptive outreach and support programs should be implemented for non-traditional learners and lower income students, and inferential research should be conducted examining the advantages and disadvantages that socioeconomic status and education level confer in an academic setting to help refine those programs moving forward. Does a higher level of education and/or status correlate with higher initial skill levels, more access to outside academic support,  or greater familiarity with the requirements needed to earn more satisfactory outcomes? These are examples of questions that, if answered, could help build successful outreach and support programs.
 
 ## Outcome by Course Load
 Course load is a feature that categorizes the amount of credits the student was studying at the time of the course. The categories are as follows: 
@@ -149,12 +151,12 @@ Course load is a feature that categorizes the amount of credits the student was 
 
 ![graph5](./reports/figures/outcomes_cl.png)
 
-Statistical testing was performed and it was found that course load and outcome are not independent. A light course load contributes positively to Distinction, Pass, and (counterintuitively) Fail, while it contributes negatively to Withdrawn. Conversely,  Medium and Heavy course loads contribute negatively to Distinction, Pass and (again, counterintuitively) Fail,  while they contribute positively to Withdrawn.
+A Chi-Square test was performed and it was found that course load and outcome are not independent(p value= 1.9942967713148247e-188). A light course load contributes positively to Distinction, Pass, and (counterintuitively) Fail, while it contributes negatively to Withdrawn. Conversely,  Medium and Heavy course loads contribute negatively to Distinction, Pass and (again, counterintuitively) Fail, while they contribute positively to Withdrawn.
 
 **Course load has a small effect on Pass, a medium sized effect on Withdraw and Fail, and a large effect on Distinction.**
 
 ## Recommendation
-Encourage students to maintain a modest course load. We can see from the graph above that nearly half of the students with a heavy course load withdraw before the end of the course, and even at a medium load level there are more withdraws than passes. This data can be used to help set realistic expectations with students during matriculation and guide them to course loads that are more conducive to academic success.
+Advise students to maintain modest course loads. We can see from the graph above that nearly half of the students with a heavy course load withdraw before the end of the course, and even at a medium load levels there are more withdraws than passes. This data can be used to help set realistic expectations with students during matriculation and guide them to course loads that are more conducive to academic success.
 
 ## Oucome by  Activity Level
 The `activity_level` feature is a measure of the student's engagment with a course's online materials, and is  calculated by adding the total number of online activities undertaken by the student with the total number of clicks for those activities. The categories are as follows:
@@ -165,12 +167,12 @@ The `activity_level` feature is a measure of the student's engagment with a cour
 - 2030-5402 Total: Heavy
 
 ![graph6](./reports/figures/outcomes_sumact.png)
-Light activity levels contribute negatively to Distinction and Pass, and contribute positively to Withdrawn and Fail. Conversely,  Medium and Heavy activity levels contribute positively to Distinction and Pass, and contribute negatively to Withdrawn and Fail.
+A Chi-Squared test was performed and it was found that activity level and outcome are not independent(p value= 0.0). Light activity levels contribute negatively to Distinction and  Pass, while they contributes positively to Withdrawn and Fail. Conversely,  Medium and Heavy activity levels contribute positively to Distinction and Pass, while they contribute negatively to Withdrawn and Fail.
 
 **`activity_level` has a large effect size on all of the outcomes, and has the largest effect sizes of all the features tested.**
 
 ## Recommendation
-Encourage students to maintain a medium or higher activity, and initiate an automated reminder system that triggers when students fall below a predetermined activity level. Also, implement an web design assessment and A/B testing program with the goal of identifying ways of driving up student engagement. As noted in the study above, the main worry of over 70\% of college students is remaining egaged with their material online, and according to these activity level findings, they are right to be concerned.
+Counsel students to maintain a medium or higher activity levels, and initiate an automated reminder system that triggers when students fall below a predetermined activity level. Also, implement an web design assessment and A/B testing program with the goal of identifying ways of driving up student engagement. As noted in the study above, the main worry of over 70\% of college students is remaining egaged with their material online, and according to these activity level findings, they are right to be concerned.
 
 ***
 # Modeling
@@ -180,19 +182,18 @@ Details of the full modeling process can be found here:
 
 
 ## Baseline Model: Dummy Classifier
-The classifier will predict the majority class for each observation.
-
+The classifier will predict the minority class for each observation. In terms of the business case, this would represent a situation where all of the students need interventions.
 ![graph7](./reports/figures/baseline.png)
 
-<font size="4">Baseline Scores: Accuracy = .64, F1 = 0, Recall = 0, Precision = 0</font>
+<font size="4">Baseline Scores: Accuracy = .36, F1 = .53, Recall = 1, Precision = .36</font>
 
-### Score Interpretation:
+## Score Interpretation:
 
 F1 is a mix of both precision and recall, so the interpretation of the results is more easily given in terms of recall and precision.
 
-- From the confusion matrix we see that the baseline model is classifying everything as the majority class, which was expected.
-- No outcomes were correctly classified as Unsatisfactory, so the recall score for this model is 0. 
-- No outcomes were classified as Unsatisfactory, so the precision score (the proportion of outcomes classified as Unsatisfactory that were truly Unsatisfactory) is 0 as well.
+- From the confusion matrix we see that the baseline model is classifying everything as the minority class, which was expected.
+- All Unsatisfactory outcomes were correctly classified as Unsatisfactory, so the recall score for this model is 1. 
+- The precision score of .36 indicates that 36\% of outcomes classified as Unsatisfactory were truly Unsatisfactory.
 
 ***
 ## First Simple Model: Naive Bayes Classifier
@@ -205,7 +206,7 @@ F1 is a mix of both precision and recall, so the interpretation of the results i
 
 ### Score Interpretation
 
-- From the confusion matrix we see that the fsm model is classifying outcomes slightly better than baseline.
+- From the confusion matrix we see that the first simple model is classifying outcomes slightly better than baseline.
 - The recall score of .19 indicates that about 19\% outcomes were correctly classified as Unsatisfactory. 
 - The precision score .53 indicates that about 53\% of outcomes classified as Unsatisfactory were truly Unsatisfactory.
 ***
