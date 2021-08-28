@@ -96,6 +96,7 @@ Data preparation, EDA, and feature engineering experiments for the project can b
 
 ***
 # EDA & Recommendations
+The siginificance level for all tests in the project is alpha=.05
 
 EDA for the project is detailed in the following notebook: [Data Cleaning/EDA Notebook](./notebooks/exploratory/cleaning_eda.ipynb)
 
@@ -127,7 +128,7 @@ The final results were binarized into Satisfactory (Pass, Distinction) and Unsat
 IMD Band is a measure of socioeconomic status that is based on geographic location. The higher the band, the better off the student is. 
 ![graph3](./reports/figures/outcomes_imd.png)
 
-A Chi_Squared test was performed and it was found that IMD band and outcome are not independent(p value=2.473461324525511e-120). In general, Distinction and Pass vary directly with IMD band. The higher the student's IMD band, the more likely the student is to pass or pass with distinction. Conversely, Withdrawn and Fail vary inversely with IMD band. In general, the lower the student's IMD band the more likely the student is to fail or withdraw. 
+A Chi-Squared test was performed, and it was found that IMD band and outcome are not independent (p value=2.473461324525511e-120). In general, Distinction and Pass vary directly with IMD band. The higher the student's IMD band, the more likely the student is to pass or pass with distinction. Conversely, Withdrawn and Fail vary inversely with IMD band. In general, the lower the student's IMD band the more likely the student is to fail or withdraw. 
 
 **IMD band has a small, but statistically significant effect on the outcomes Pass and Withdrawn, and a medium sized effect on Fail and Distinction.**
 
@@ -135,9 +136,9 @@ A Chi_Squared test was performed and it was found that IMD band and outcome are 
 The rank of these UK education categories is as follows(from lowest to highest): No Formal Qualifications, Lower Than A Level, A Level, HE Qualification, Post Graduate Qualification.
 ![graph4](./reports/figures/outcomes_edu.png)
 
-Statistical testing was performed and it was found that education level and outcome are not independent. In general, Distinction and Pass vary directly with education level. The higher the student's education level, the more likely the student is to pass or pass with distinction. Conversely, Withdrawn and Fail vary inversely with education. In general, the lower the student's education level the more likely the student is to fail or withdraw. 
+A Chi-Squared test was performed, and it was found that education level and outcome are not independent (p value=2.4827414817328365e-198). In general, Distinction and Pass vary directly with education level. The higher the student's education level, the more likely the student is to pass or pass with distinction. Conversely, Withdrawn and Fail vary inversely with education. In general, the lower the student's education level the more likely the student is to fail or withdraw. 
 
-**Adjusted for degrees of freedom, the Cramer's V results indicate that `highest_education ` has a small effect on Pass, a medium effect on Fail and Withdrawn, and a large effect on Distinction.**
+**Education level has a small effect on Pass, a medium effect on Fail and Withdrawn, and a large effect on Distinction.**
 
 ## Recommendation
 
@@ -151,7 +152,7 @@ Course load is a feature that categorizes the amount of credits the student was 
 
 ![graph5](./reports/figures/outcomes_cl.png)
 
-A Chi-Square test was performed and it was found that course load and outcome are not independent(p value= 1.9942967713148247e-188). A light course load contributes positively to Distinction, Pass, and (counterintuitively) Fail, while it contributes negatively to Withdrawn. Conversely,  Medium and Heavy course loads contribute negatively to Distinction, Pass and (again, counterintuitively) Fail, while they contribute positively to Withdrawn.
+A Chi-Squared test was performed, and it was found that course load and outcome are not independent (p value= 1.9942967713148247e-188). A light course load contributes positively to Distinction, Pass, and (counterintuitively) Fail, while it contributes negatively to Withdrawn. Conversely,  Medium and Heavy course loads contribute negatively to Distinction, Pass and (again, counterintuitively) Fail, while they contribute positively to Withdrawn.
 
 **Course load has a small effect on Pass, a medium sized effect on Withdraw and Fail, and a large effect on Distinction.**
 
@@ -167,9 +168,9 @@ The `activity_level` feature is a measure of the student's engagment with a cour
 - 2030-5402 Total: Heavy
 
 ![graph6](./reports/figures/outcomes_sumact.png)
-A Chi-Squared test was performed and it was found that activity level and outcome are not independent(p value= 0.0). Light activity levels contribute negatively to Distinction and  Pass, while they contributes positively to Withdrawn and Fail. Conversely,  Medium and Heavy activity levels contribute positively to Distinction and Pass, while they contribute negatively to Withdrawn and Fail.
+A Chi-Squared test was performed, and it was found that activity level and outcome are not independent (p value= 0.0). Light activity levels contribute negatively to Distinction and  Pass, while they contributes positively to Withdrawn and Fail. Conversely,  Medium and Heavy activity levels contribute positively to Distinction and Pass, while they contribute negatively to Withdrawn and Fail.
 
-**`activity_level` has a large effect size on all of the outcomes, and has the largest effect sizes of all the features tested.**
+**Activity level has a large effect size on all of the outcomes, and has the largest effect sizes of all the features tested.**
 
 ## Recommendation
 Counsel students to maintain a medium or higher activity levels, and initiate an automated reminder system that triggers when students fall below a predetermined activity level. Also, implement an web design assessment and A/B testing program with the goal of identifying ways of driving up student engagement. As noted in the study above, the main worry of over 70\% of college students is remaining egaged with their material online, and according to these activity level findings, they are right to be concerned.
