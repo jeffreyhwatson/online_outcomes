@@ -41,12 +41,12 @@ In the years before the pandemic, online learning had been enjoying slow, reliab
 
 While the growth in online learning has provides opportunites, it has also raises concerns about student engagement, learning loss, and inequality. According to a recent NASPA Foundation survey, the main concern of over 70\% of college students is staying engaged with their online course materials<sup>5</sup>. The World Bank also reports that school closures and online learning have led to widespread learning loss across Europe and Central Asia<sup>6</sup>, and Harvard Professor Todd Rose notes that "Poor students and first-generation students often don’t do as well online."<sup>7</sup>
 
-This project aims to develop recommendations for strategies to avoid unsatisfactory outcomes in online learning environments and implement a model that can predict unfavorable outcomes in a timely manner so interventions can be applied to improve those outcomes.
+This project aimed to develop recommendations for strategies to avoid unsatisfactory outcomes in online learning environments and implement a model that can predict unfavorable outcomes in a timely manner so interventions can be applied to improve those outcomes.
 
 ## Overview
-The Covid-19 pandemic has only accelerated the growth in online learning and the opportunities and concerns associated with it. This project aimed to develop a model to predict unfavorable outcomes in virtual learning environments and recommendations for strategies to avoid and/or remedy those outcomes.
+Since I wanted to avoid both false positives and false negatives (to capture the maximum number of at-risk students while still efficiently allocating resources) for this project, I chose an accuracy measure of F1,  because it is sensitive to both types of error. 
 
-Since I wanted to avoid both false positives and false negatives (to capture the maximum number of at-risk students while still efficiently allocating resources) for this project, I chose an accuracy measure of F1,  because it is sensitive to both types of error. Data cleaning, EDA, modeling, and evaluation were performed, and a voting classifier model with an F1 accuracy score of 0.69 (recall=.65, precision=.72) was chosen as the the final model for the project. An F1 score is a mix of both precision and recall (F1=1 means perfect recall and precision), so interpretation of the results is more easily described in terms of recall and precision. 
+Data cleaning, EDA, modeling, and evaluation were performed, and a voting classifier model with an F1 accuracy score of 0.69 (recall=.65, precision=.72) was chosen as the the final model for the project. An F1 score is a mix of both precision and recall (F1=1 means perfect recall and precision), so interpretation of the results is more easily described in terms of recall and precision. 
 
 - The recall score of .65 meant that 65% of unsatisfactory outcomes were correctly classified as unsatisfactory.
 
@@ -79,16 +79,16 @@ ERD & Data Details:
 ***
 ## Data Preparation: SQL & Object Oriented Methods
 
-SQL, data preparation and EDA experiments undertaken in the [Data Cleaning/EDA Notebook](./notebooks/exploratory/cleaning_eda.ipynb) were ultimately coded into data frame creation, data cleaning, and feature engineering OOP methods for a Database class. This work was done so the methods could be implemented on the fly to create various data configurations in the modeling, error analysis, and recommendations notebooks. The code located in the [class_Database.py](./src/class_Database.py) file. 
+SQL, data preparation and EDA experiments undertaken in the [Data Cleaning/EDA Notebook](./notebooks/exploratory/cleaning_eda.ipynb) were ultimately coded into data frame creation, data cleaning, and feature engineering OOP methods for a Database class. I did this work so the methods could be implemented on the fly to create various data configurations in the modeling, error analysis, and recommendations notebooks. The code located in the [class_Database.py](./src/class_Database.py) file. 
 
 ## Data Prepartion: Overview
 
-The data was inserted into an SQL database, and a data frame was constructed from the various database tables. During the creation process, the multiclass `final_result` feature was binarized into a `target` feature with classes Satisfactory (Pass, Distinction), and Unsatisfactory (Withdrawn, Fail). A `row_id` feature was constructed to identify unique student-course-month combinations, and a `sum_activity` feature was added to quantify the level of a student's interaction with the course material. Lastly, `weighted_ave`, `mean_score`, and `median_score` were derived from the each row's  assessment data.
+The data was inserted into an SQL database, and a data frame was constructed from the various database tables. During the creation process, the multiclass `final_result` feature was binarized into a `target` feature with classes Satisfactory (Pass, Distinction), and Unsatisfactory (Withdrawn, Fail). A `row_id` feature was constructed to identify unique student-course-month combinations, and a `sum_activity` feature was added to quantify the level of a student's interaction with the course material. Lastly, `weighted_ave`, `mean_score`, and `median_score` were derived from each row's  assessment data.
 
-After the data frame was created various cosmetic fixes were applied to the data, and outliers were dropped from the `studied_credits`, `weighted_ave`, and `sum_activity` features using IQR fences. A categorical `course_load` feature was derived by binning `studied_credits`, and a categorical `activity_level` feature was created by binning `sum_activity`. The `course_load` feature was used during the modeling process, and `activity_level` was used for statistical testing when while investigating business recommendations. Lastly, null values and extraneous columns were dropped in preparation of the modeling process.
+After the data frame was created, various cosmetic fixes were applied to the data, and outliers were dropped from the `studied_credits`, `weighted_ave`, and `sum_activity` features using IQR fences. A categorical `course_load` feature was derived by binning `studied_credits`, and a categorical `activity_level` feature was created by binning `sum_activity`. The `course_load` feature was used during the modeling process, and `activity_level` was used for statistical testing when while investigating business recommendations. Lastly, null values and extraneous columns were dropped in preparation of the modeling process.
 
 ## Data Prepartion: Half-Term Data
-In order to be able to predict unsatisfactory outcomes while there is still time to intervene, we limited the model to data logged up to the halfway of the courses. Since the median course length is 240 days, a cutoff point of 120 days was chosen. Further, students who withdrew before the 120th day were dropped from the data, since their outcome was fully determined within the 120 day window.
+In order to be able to predict unsatisfactory outcomes while there is still time to intervene, I limited the model to data logged up to the halfway of the courses. Since the median course length is 240 days, I  was chose a cutoff point of 120 days. Further, students who withdrew before the 120th day were dropped from the data, since their outcome was fully determined within the 120 day window.
 
 Data preparation, EDA, and feature engineering experiments for the project can be found here:
 [Data Cleaning/EDA Notebook](./notebooks/exploratory/cleaning_eda.ipynb)
@@ -176,6 +176,7 @@ Counsel students to maintain a medium or higher activity levels, and initiate an
 
 ***
 # Modeling
+Since I wanted to indentify as many unsatisfactory outcomes possible while still minimizing false positives, I chose F1 as the project's metric. 
 
 Details of the full modeling process can be found here:
 [Modeling Notebook](./notebooks/exploratory/half_term_modeling.ipynb)
@@ -263,7 +264,7 @@ Checking the error rates for each of the multiclass outcomes shows why the model
 | Fail        | 0.107153    |
 | Distinction | 0.092354    |
 
-Calculating the class distribution in the modeling data, we find an almost 3:2 class imbalance between the Satisfactory and Unsatisfactory classes. A multiclass classifier with oversampling might improve model performance on this data.
+There is almost a 3:2 class imbalance between the Satisfactory and Unsatisfactory classes. A multiclass classifier with oversampling might improve model performance on this data.
 
 ***
 ## Conclusion
@@ -273,11 +274,11 @@ In the end, a moderately successful model was developed that can correctly predi
 
 - Encourage students to maintain a modest course load. 
 
-- Encourage students to maintain a medium or higher online activity level and initiate an automated reminder system that triggers when a student fall below a predetermined level.
+- Encourage students to maintain a medium or higher online activity level and initiate an automated reminder system that triggers when students fall below a predetermined activity level.
 
 ***
 ## Next Steps
-Next steps for the project include:
+Next steps for the project:
 
 - Develop a multiclass model with oversampling to better address to class imbalances and improve performance.
 
