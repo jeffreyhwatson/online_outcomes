@@ -36,24 +36,6 @@
 `cd` into the project folder and run `conda env create --file
 oo.yml` in your terminal. Next, run `conda activate oo`.
 ***
-## Overview
-The Covid-19 pandemic has only accelerated the growth in online learning and the opportunities and concerns associated with it. This project aimed to develop a model to predict unfavorable outcomes in virtual learning environments and recommendations for strategies to avoid and/or remedy those outcomes.
-
-Because I wanted to avoid both false positives and false negatives (to capture the maximum number of at-risk students while still efficiently allocating resources) for this project, an accuracy measure of F1 was chosen since it is sensitive to both types of error. Data cleaning, EDA, modeling, and evaluation were performed, and a voting classifier model with an F1 accuracy score of 0.67 (recall=.66, precision=.68) was chosen as the the final model for the project. An F1 score is a mix of both precision and recall (F1=1 means perfect recall and precision), so interpretation of the results is more easily described in terms of recall and precision. 
-
-- The recall score of .66 meant that 66% of unsatisfactory outcomes were correctly classified as unsatisfactory.
-
-- The precision score of .68 indicated that 68% of outcomes classified as unsatisfactory were truly unsatisfactory. 
-
-Statistical testing was also employed to develop the following recommendations to help drive a higher level of satisfactory outcomes:
-
-- Preemptive outreach and support programs should be implemented for non-traditional learners and lower income students, and inferential research should be conducted examining the advantages and disadvantages that socioeconomic status and education level confer in an academic setting to help refine those programs moving forward.
-
-- Students should be advised to maintain modest course loads. Over half of the students with a heavy course load withdraw before the end of the course, and even a medium course load makes a withdrawl about as likely as a passing grade.
-
-- Counsel students to maintain medium or higher online activity levels, and initiate an automated reminder system that triggers when a student fall below a predetermined level. Also, initiate an web design assessment and A/B testing program with the goal of identifying ways of driving up student engagement.
-
-***
 ## Business Understanding
 In the years before the pandemic, online learning had been enjoying slow, reliable growth <sup>1</sup>, and was predicted to become a \$350 Billion global market by 2025.<sup>2</sup> Covid-19 has only accelerated this trend, with examples such as the online learning platform edX experiencing a 15-fold growth in registrations in April 2020<sup>3</sup>, and almost 93\% of school-age children engaged in online learning in 2020.<sup>4</sup> 
 
@@ -61,13 +43,29 @@ While the growth in online learning has provides opportunites, it has also raise
 
 This project aims to develop recommendations for strategies to avoid unsatisfactory outcomes in online learning environments and implement a model that can predict unfavorable outcomes in a timely manner so interventions can be applied to improve those outcomes.
 
+## Overview
+The Covid-19 pandemic has only accelerated the growth in online learning and the opportunities and concerns associated with it. This project aimed to develop a model to predict unfavorable outcomes in virtual learning environments and recommendations for strategies to avoid and/or remedy those outcomes.
+
+Since I wanted to avoid both false positives and false negatives (to capture the maximum number of at-risk students while still efficiently allocating resources) for this project, I chose an accuracy measure of F1,  because it is sensitive to both types of error. Data cleaning, EDA, modeling, and evaluation were performed, and a voting classifier model with an F1 accuracy score of 0.69 (recall=.65, precision=.72) was chosen as the the final model for the project. An F1 score is a mix of both precision and recall (F1=1 means perfect recall and precision), so interpretation of the results is more easily described in terms of recall and precision. 
+
+- The recall score of .65 meant that 65% of unsatisfactory outcomes were correctly classified as unsatisfactory.
+
+- The precision score of .72 indicated that 72% of outcomes classified as unsatisfactory were truly unsatisfactory. 
+
+Statistical testing was also employed to develop the following recommendations to help drive a higher level of satisfactory outcomes:
+
+- Preemptive outreach and support programs should be implemented for non-traditional learners and lower income students, and inferential research should be conducted examining the advantages and disadvantages that socioeconomic status and education level confer in an academic setting to help refine those programs moving forward.
+
+- Students should be advised to maintain modest course loads. Over half of the students with a heavy course load withdraw before the end of the course, and even a medium course load makes a withdrawl about as likely as a passing grade.
+
+- Students should be counseled to maintain medium or higher online activity levels. Further, an automated reminder system that triggers when students fall below a predetermined level should be initiated, along with a web design assessment and A/B testing program, with the goal of driving up student engagement.
 
 ***
 ## Data Understanding
 
 The data set for the project is the Open University Learning Analytics dataset.
 
-The dataset was obtained as a compressed zip file containing 7 csv files of tabular data. After cleaning and EDA, the data was ultimately reduced to a modeling dataset 19,458 rows and 13 columns (12 features plus the target).
+The dataset was obtained as a compressed zip file containing 7 csv files of tabular data. After cleaning and EDA, the data was ultimately reduced to a modeling dataset of 19,458 rows and 14 columns (13 features plus the target).
 
 Citation:
 Kuzilek, J., Hlosta, M. & Zdrahal, Z. Open University Learning Analytics dataset. Sci Data 4, 170171 (2017). [Article](https://doi.org/10.1038/sdata.2017.171)
@@ -81,7 +79,7 @@ ERD & Data Details:
 ***
 ## Data Preparation: SQL & Object Oriented Methods
 
-SQL, data preparation and EDA experiments undertaken in the [Data Cleaning/EDA Notebook](./notebooks/exploratory/cleaning_eda.ipynb) were ultimately coded into data frame creation, data cleaning, and feature engineering OOP methods for a Database class. This was done so the methods could be implemented on the fly to create various data configurations in the modeling, error analysis, and recommendations notebooks. The code located in the [class_Database.py](./src/class_Database.py) file. 
+SQL, data preparation and EDA experiments undertaken in the [Data Cleaning/EDA Notebook](./notebooks/exploratory/cleaning_eda.ipynb) were ultimately coded into data frame creation, data cleaning, and feature engineering OOP methods for a Database class. This work was done so the methods could be implemented on the fly to create various data configurations in the modeling, error analysis, and recommendations notebooks. The code located in the [class_Database.py](./src/class_Database.py) file. 
 
 ## Data Prepartion: Overview
 
@@ -89,6 +87,7 @@ The data was inserted into an SQL database, and a data frame was constructed fro
 
 After the data frame was created various cosmetic fixes were applied to the data, and outliers were dropped from the `studied_credits`, `weighted_ave`, and `sum_activity` features using IQR fences. A categorical `course_load` feature was derived by binning `studied_credits`, and a categorical `activity_level` feature was created by binning `sum_activity`. The `course_load` feature was used during the modeling process, and `activity_level` was used for statistical testing when while investigating business recommendations. Lastly, null values and extraneous columns were dropped in preparation of the modeling process.
 
+## Data Prepartion: Half-Term Data
 In order to be able to predict unsatisfactory outcomes while there is still time to intervene, we limited the model to data logged up to the halfway of the courses. Since the median course length is 240 days, a cutoff point of 120 days was chosen. Further, students who withdrew before the 120th day were dropped from the data, since their outcome was fully determined within the 120 day window.
 
 Data preparation, EDA, and feature engineering experiments for the project can be found here:
@@ -181,9 +180,9 @@ Counsel students to maintain a medium or higher activity levels, and initiate an
 Details of the full modeling process can be found here:
 [Modeling Notebook](./notebooks/exploratory/half_term_modeling.ipynb)
 
-
 ## Baseline Model: Dummy Classifier
 The classifier will predict the minority class for each observation. In terms of the business case, this would represent a situation where all of the students need interventions.
+
 ![graph7](./reports/figures/baseline.png)
 
 <font size="4">Baseline Scores: Accuracy = .36, F1 = .53, Recall = 1, Precision = .36</font>
@@ -199,16 +198,16 @@ F1 is a mix of both precision and recall, so the interpretation of the results i
 ***
 ## First Simple Model: Naive Bayes Classifier
 
-<font size="4">Average Validation Scores: Accuracy=.64, F1 = .28, Recall = .19, Precision = .52</font>
+<font size="4">Average Validation Scores: Accuracy=.66, F1 = .34, Recall = .25, Precision = .55</font>
 
 ![graph8](./reports/figures/fsm.png)
 
-<font size="4">Scores on Test Data: Accuracy=.64, F1 = .28, Recall = .19, Precision = .53</font>
+<font size="4">Scores on Test Data: Accuracy=.65, F1 = .33, Recall = .24, Precision = .53</font>
 
 ### Score Interpretation
 
 - From the confusion matrix we see that the first simple model is classifying outcomes slightly better than baseline.
-- The recall score of .19 indicates that about 19\% outcomes were correctly classified as Unsatisfactory. 
+- The recall score of .24 indicates that about 24\% outcomes were correctly classified as Unsatisfactory. 
 - The precision score .53 indicates that about 53\% of outcomes classified as Unsatisfactory were truly Unsatisfactory.
 ***
 # Intermediate Modeling and Adjustments
@@ -231,24 +230,24 @@ After the final model was chosen, hyperparameter tuning was performed using Rand
 
 ***
 ## Final Model: Voting Classifier (Bagging CLF, Random Forest CLF, XGBoost CLF)
-The Model consists of the three highest performing algorithms tested.
+I found that the combination of these three models had the best mix speed and performance.
 
-<font size="4">Average Training Scores: F1=.66, Recall=.65, Precision=.67</font>
+<font size="4">Average Training Scores: F1=.69, Recall=.65, Precision=.72</font>
 
 ![graph9](./reports/figures/final_model.png)
 
-<font size="4">Scores on Test Data: F1=.67, Recall=.66, Precision=.68</font>
+<font size="4">Scores on Test Data: F1=.69, Recall=.65, Precision=.72</font>
 
 #### Score Interpretation
 
 Upon validation with the test data we see that the model is still having some trouble the minority class, but performance has been improved to a level that is acceptable for our purposes.
 
-- The recall score of .66 indicates that about 66\% outcomes were correctly classified as Unsatisfactory.
-- The precision score .68 indicates that about 68\% of outcomes classified as Unsatisfactory were truly Unsatisfactory.
+- The recall score of .65 indicates that about 65\% outcomes were correctly classified as Unsatisfactory.
+- The precision score .72 indicates that about 72\% of outcomes classified as Unsatisfactory were truly Unsatisfactory.
 
 #### Permutation Importances & Notes on the Features
 ![graph10](./reports/figures/perm_importances.png)
-The assessment score features (median_score, mean_score & weighted_ave) are the main drivers of the model, with mean_score being the greatest. Interestingly, some of the most statistically significant features (imd_band, highest_education, and course_load) have little to no effect on the model.
+The features `weighted_ave` and `code_module` are the main drivers of the model, with `weighted_ave` being the greatest. Interestingly, some of the most statistically significant features (imd_band, highest_education, and course_load) have little to no effect on the model.
 
 ***
 #### Unsatisfactory Class Error Analysis
@@ -268,9 +267,9 @@ Calculating the class distribution in the modeling data, we find an almost 3:2 c
 
 ***
 ## Conclusion
-In the end, a moderately successful model was developed that can correctly predict outcomes halfway through the course about 66\% of the time. This time frame allows enough time to intervene and steer the student toward a satisfactory outcome. In addition, the following recommendations for prevention/intevention strategies were developed through statistical testing:
+In the end, a moderately successful model was developed that can correctly predict outcomes, halfway through the course, about 65\% of the time. This time frame allows enough time to intervene and steer the student toward a satisfactory outcome. In addition, the following recommendations for prevention/intevention strategies were developed through statistical testing:
 
-- Preemptive outreach and support programs for non-traditional learners and lower income students.
+- Initiate preemptive outreach and support programs for non-traditional learners and lower income students.
 
 - Encourage students to maintain a modest course load. 
 
