@@ -264,7 +264,7 @@ Checking the error rates for each of the multiclass outcomes shows why the model
 | Fail        | 0.107153    |
 | Distinction | 0.092354    |
 
-There is almost a 3:2 class imbalance between the Satisfactory and Unsatisfactory classes. A multiclass classifier with oversampling might improve model performance on this data.
+There is almost a 2:1 class imbalance between the Satisfactory and Unsatisfactory classes. A multiclass classifier with oversampling might improve model performance on this data.
 
 ***
 ## Conclusion
