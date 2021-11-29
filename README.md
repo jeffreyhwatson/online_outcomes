@@ -129,7 +129,7 @@ IMD Band is a measure of socioeconomic status that is based on geographic locati
 
 A Chi-Squared test was performed, and it was found that IMD band and outcome are not independent (p value=2.473461324525511e-120). In general, Distinction and Pass vary directly with IMD band. The higher the student's IMD band, the more likely the student is to pass or pass with distinction. Conversely, Withdrawn and Fail vary inversely with IMD band. In general, the lower the student's IMD band the more likely the student is to fail or withdraw. 
 
-**IMD band has a small, statistically significant effect student outcomes.** 
+**IMD band has a small, statistically significant effect on student outcomes.** 
 
 **V = 0.08360564396104112**
 
@@ -141,7 +141,7 @@ The rank of these UK education categories is as follows (from lowest to highest)
 
 A Chi-Squared test was performed, and it was found that education level and outcome are not independent (p value=2.4827414817328365e-198). In general, Distinction and Pass vary directly with education level. The higher the student's education level, the more likely the student is to pass or pass with distinction. Conversely, Withdrawn and Fail vary inversely with education. In general, the lower the student's education level the more likely the student is to fail or withdraw. 
 
-**Education level has a small, statistically significant effect student outcomes.**
+**Education level has a small, statistically significant effect on student outcomes.**
 
 **V = 0.10148164448653103**
 
@@ -161,7 +161,7 @@ Course load is a feature that categorizes the amount of credits the student was 
 
 A Chi-Squared test was performed, and it was found that course load and outcome are not independent (p value= 1.9942967713148247e-188). A light course load contributes positively to Distinction, Pass, and (counterintuitively) Fail, while it contributes negatively to Withdrawn. Conversely,  Medium and Heavy course loads contribute negatively to Distinction, Pass and (again, counterintuitively) Fail, while they contribute positively to Withdrawn.
 
-**Course load has a small, statistically significant effect student outcomes.** 
+**Course load has a small, statistically significant effect on student outcomes.** 
 
 **V = 0.119359288949109**
 
