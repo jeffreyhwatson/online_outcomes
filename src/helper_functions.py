@@ -241,15 +241,16 @@ def cramers_v(cross_tabs):
     # getting the chi sq. stat
     chi2 = stats.chi2_contingency(cross_tabs)[0]
     # calculating the total number of observations
-    n = cross_tabs.sum()
+    n = cross_tabs.sum().sum()
     # getting the degrees of freedom
     dof = min(cross_tabs.shape)-1
     # calculating cramer's v
     v = np.sqrt(chi2/(n*dof))
     # printing results
+    print(f'V = {v}')
     print(f'Cramer\'s V Degrees of Freedom = {dof}')
     print(f'\nEffect Size Thresholds\n{sizes}\n')
-    print(f'{v}')
+    
     
 def perm_importances(clf, X, y, scoring, plot_name=False):
     """
