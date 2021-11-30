@@ -223,7 +223,7 @@ def chi_sq_test(cross_tabs):
     
 def cramers_v(cross_tabs):
     """
-    Prints the degrees of freedom, effect size thresholds, and Crarmer's V values.
+    Prints the degrees of freedom, effect size thresholds, and Cramer's V value.
     
     Args:
         cross_tabs: A crosstab dataframe.
